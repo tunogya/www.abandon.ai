@@ -77,9 +77,9 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'ABANDON',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'ABANDON Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -87,11 +87,11 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Docs',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/tunogya/',
           label: 'GitHub',
           position: 'right',
         },
@@ -140,12 +140,17 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} ABANDON, Inc.`,
+      copyright: `Copyright © ${new Date().getFullYear()} ABANDON, INC. Made by @tunogya`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: true,
+      respectPrefersColorScheme: false,
+    }
   } satisfies Preset.ThemeConfig,
 };
 
