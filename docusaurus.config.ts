@@ -91,6 +91,11 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
+          label: 'Gocamp.id',
+          href: 'https://gocamp.id/',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/tunogya/',
           label: 'GitHub',
           position: 'right',
@@ -129,9 +134,9 @@ const config: Config = {
               href: 'https://x.com/abandonai',
             },
             {
-              label: 'Gocamp.id',
-              href: 'https://gocamp.id/',
-            },
+              label: 'Youtube',
+              href: 'https://www.youtube.com/@tunogya',
+            }
           ],
         },
         {
@@ -144,6 +149,10 @@ const config: Config = {
             {
               label: 'GitHub',
               href: 'https://github.com/tunogya/www.abandon.ai',
+            },
+            {
+              label: 'Gocamp.id',
+              href: 'https://gocamp.id/',
             },
           ],
         },
