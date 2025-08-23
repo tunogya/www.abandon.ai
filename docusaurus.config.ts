@@ -80,7 +80,7 @@ const config: Config = {
       title: 'ABANDON',
       logo: {
         alt: 'ABANDON Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.png',
       },
       items: [
         {
