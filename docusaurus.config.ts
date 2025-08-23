@@ -128,6 +128,10 @@ const config: Config = {
               label: 'X',
               href: 'https://x.com/abandonai',
             },
+            {
+              label: 'Gocamp.id',
+              href: 'https://gocamp.id/',
+            },
           ],
         },
         {
