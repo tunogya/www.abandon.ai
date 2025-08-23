@@ -136,6 +136,10 @@ const config: Config = {
             {
               label: 'Youtube',
               href: 'https://www.youtube.com/@tunogya',
+            },
+            {
+              label: 'Chat @Bali',
+              href: 'https://chat.abandon.ai/@bali',
             }
           ],
         },
