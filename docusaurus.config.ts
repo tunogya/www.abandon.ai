@@ -115,6 +115,10 @@ const config: Config = {
               label: 'Become an NPC',
               to: '/docs/become-an-npc',
             },
+            {
+              label: 'Sponsorship',
+              to: '/docs/sponsorship',
+            },
           ],
         },
         {
