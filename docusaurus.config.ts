@@ -91,13 +91,18 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
+          href: 'https://github.com/tunogya/',
+          label: 'GitHub',
+          position: 'left',
+        },
+        {
           label: 'Gocamp.id',
           href: 'https://gocamp.id/',
           position: 'right',
         },
         {
-          href: 'https://github.com/tunogya/',
-          label: 'GitHub',
+          label: 'Chat Online',
+          href: 'https://chat.abandon.ai/@bali',
           position: 'right',
         },
       ],
@@ -138,7 +143,7 @@ const config: Config = {
               href: 'https://www.youtube.com/@tunogya',
             },
             {
-              label: 'Chat @Bali',
+              label: 'Chat Online',
               href: 'https://chat.abandon.ai/@bali',
             }
           ],
