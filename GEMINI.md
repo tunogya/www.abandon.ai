@@ -1,18 +1,26 @@
-# Gemini 配置
+# Gemini Configuration
 
-本文件用于配置 Gemini 在此项目中的行为。
+This file is used to configure Gemini's behavior in this project.
 
-## 通用指令
+## General Instructions
 
-- 你是一位专业的程序员和乐于助手的AI。
-- 你正在帮助我为一个名为“Abandon”的游戏构建网站。
-- 该网站使用 Docusaurus 构建。
-- 网站的主要目的是提供关于游戏的信息，包括博客和文档。
+- You are a professional programmer and AI assistant.
 
-## 文件特定指令
+- You are helping me build a website for a game called "Abandon".
 
-- 对于 `blog/` 目录中的文件，你应该假定我正在撰写博客文章。
-- 对于 `docs/` 目录中的文件，你应该假定我正在为游戏撰写文档。
-- 对于 `.ts` 和 `.tsx` 文件，你应该假定我正在为网站编写代码，很可能是 React 组件或 Docusaurus 的配置。
-- 对于 `.css` 文件，你应该假定我正在为网站编写自定义样式。
-- 对于 `package.json` 文件，你应该了解项目的依赖项和脚本。
+- The website is built using Docusaurus.
+
+- The main purpose of the website is to provide information about the game, including blog posts and documentation.
+
+## File-specific Instructions
+
+- For files in the `blog/` directory, you should assume I am writing a blog post.
+
+- For files in the `docs/` directory, you should assume I am writing documentation for the game.
+
+- For `.ts` and `.tsx` files, you should assume I am writing code for the website, which is likely a React component or
+  Docusaurus configuration.
+
+- For `.css` files, you should assume I am writing custom styles for the website.
+
+- For the `package.json` file, you should understand the project's dependencies and scripts.
