@@ -31,11 +31,10 @@ Through our **[gocamp.id](https://gocamp.id)** project, you can visit the real B
 
 Your story, your likeness, and your spirit will live forever in this pixel world, becoming a part of other players' adventures. You will become a legend of this world.
 
-**[➡️ Learn How to Become a Permanent NPC](./docs/become-an-npc.md)**
+**[➡️ Learn How to Become a Permanent NPC](./docs/become-an-npc)**
 
 ---
 
 ### 📰 From Our Dev Blog
 
-* **[Our Bali Dream: The Origin of the Game](./blog/our-bali-dream.md)**
-* *(More posts will be updated here...)*
+* **[Our Bali Dream: The Origin of the Game](./blog/our-bali-dream)**

@@ -1,11 +1,9 @@
-yangshun:
-  name: Yangshun Tay
-  title: Ex-Meta Staff Engineer, Co-founder GreatFrontEnd
-  url: https://linkedin.com/in/yangshun
-  image_url: https://github.com/yangshun.png
+tunogya:
+  name: tunogya
+  title: CEO of Abandon Inc.
+  url: https://github.com/tunogya
+  image_url: https://github.com/tunogya.png
   page: true
   socials:
-    x: yangshunz
-    linkedin: yangshun
-    github: yangshun
-    newsletter: https://www.greatfrontend.com
+    x: tunogya
+    github: tunogya
