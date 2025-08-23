@@ -156,7 +156,7 @@ const config: Config = {
             },
             {
               label: 'Bybit',
-              href: 'https://gocamp.id/',
+              href: 'https://partner.bybit.com/b/BALI',
             },
             {
               label: 'Wise',
