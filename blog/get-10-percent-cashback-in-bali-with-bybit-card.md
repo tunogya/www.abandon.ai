@@ -2,6 +2,7 @@
 slug: get-10-percent-cashback-in-bali-with-bybit-card
 title: 'Get 10% Cashback in Bali with the Bybit Card!'
 authors: [ tunogya ]
+date: "2025-05-15"
 tags: [ bali, crypto, travel, sponsorship ]
 ---
 
