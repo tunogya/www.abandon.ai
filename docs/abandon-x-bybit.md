@@ -5,12 +5,12 @@ development of Abandon.
 
 ## How It Works
 
-By using our referral code **BALI** when you sign up for a new Bybit account, you can receive up to **3000U in rewards
+By using our referral code when you sign up for a new Bybit account, you can receive up to **3000U in rewards
 **!
 
 Here's what you need to do:
 
-1. **[Sign up for a Bybit account](https://www.bybit.com/en/invite?ref=BALI)** using our referral link or by manually
+1. Sign up for a Bybit account using our referral link or by manually
    entering the code **[BALI](https://partner.bybit.com/b/BALI)** or **[ABANDON](https://partner.bybit.com/b/ABANDON)**
    or **[GOCAMP](https://partner.bybit.com/b/GOCAMP)**.
 2. Apply for and activate your **[Bybit Card](https://www.bybit.global/cards/?ref=BALI&source=applet_invite)**.
