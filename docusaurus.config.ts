@@ -104,8 +104,16 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'About the Game',
+              to: '/docs/about-the-game',
+            },
+            {
+              label: 'About us',
+              to: '/docs/about-us',
+            },
+            {
+              label: 'Become an NPC',
+              to: '/docs/become-an-npc',
             },
           ],
         },
@@ -113,16 +121,8 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
               label: 'X',
-              href: 'https://x.com/docusaurus',
+              href: 'https://x.com/abandonai',
             },
           ],
         },
@@ -135,7 +135,7 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/tunogya/www.abandon.ai',
             },
           ],
         },
