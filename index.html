@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abandon Inc. Pixel Logo</title>
+    <style>
+        :root {
+            --pixel-size: 40px; /* 单个像素的大小，可在此调整缩放 */
+            --color-bg: #050505;
+            --color-pixel: #FFFFFF;
+            --color-glitch-1: #0ff; /* 青色故障 */
+            --color-glitch-2: #f0f; /* 洋红色故障 */
+            --anim-speed: 0.8s;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            color: #444;
+        }
+
+        /* 容器：保持Logo居中并添加发光效果 */
+        .logo-container {
+            position: relative;
+            padding: 20px;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+            transition: transform 0.3s ease;
+        }
+
+        /* 5x5 网格系统 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, var(--pixel-size));
+            grid-template-rows: repeat(5, var(--pixel-size));
+            gap: 0; /* 像素级，无间隙 */
+        }
+
+        /* 单个像素点 */
+        .pixel {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            transition: background-color 0.2s, transform 0.2s;
+            position: relative;
+        }
+
+        /* 激活的像素（白色部分） */
+        .pixel.on {
+            background-color: var(--color-pixel);
+            /* 入场动画 */
+            animation: assemble var(--anim-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+        }
+
+        /* 针对每个像素设置不同的延迟，形成流水线效果 */
+        .pixel:nth-child(1) { animation-delay: 0.1s; }
+        .pixel:nth-child(2) { animation-delay: 0.05s; }
+        .pixel:nth-child(3) { animation-delay: 0.0s; }
+        .pixel:nth-child(4) { animation-delay: 0.05s; }
+        .pixel:nth-child(5) { animation-delay: 0.1s; }
+        
+        .pixel:nth-child(6) { animation-delay: 0.15s; }
+        .pixel:nth-child(7) { animation-delay: 0.1s; }
+        .pixel:nth-child(9) { animation-delay: 0.1s; }
+        .pixel:nth-child(10) { animation-delay: 0.15s; }
+        
+        /* ...以此类推，为了代码整洁，更复杂的随机延迟在JS中处理或简化 */
+
+        /* 公司名称 */
+        .brand-name {
+            margin-top: 40px;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #888;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1s forwards;
+            text-align: center;
+        }
+
+        /* --- 动画关键帧 --- */
+
+        /* 组装动画：从缩小和透明状态弹出来 */
+        @keyframes assemble {
+            0% {
+                transform: scale(0) translate(0, 50px);
+                opacity: 0;
+                filter: blur(10px);
+            }
+            100% {
+                transform: scale(1) translate(0, 0);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* --- 故障效果 (Glitch) --- */
+        
+        /* 悬停时的容器抖动 */
+        .logo-container:hover {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+            transform: scale(1.05);
+        }
+
+        /* 悬停时像素的随机颜色偏移 */
+        .logo-container:hover .pixel.on {
+            animation: pixel-glitch 0.2s infinite;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0) scale(1.05); }
+            20%, 80% { transform: translate3d(2px, 0, 0) scale(1.05); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0) scale(1.05); }
+            40%, 60% { transform: translate3d(4px, 0, 0) scale(1.05); }
+        }
+
+        @keyframes pixel-glitch {
+            0% { background-color: var(--color-pixel); transform: translate(0,0); }
+            20% { background-color: var(--color-glitch-1); transform: translate(-2px, 2px); }
+            40% { background-color: var(--color-pixel); transform: translate(0,0); }
+            60% { background-color: var(--color-glitch-2); transform: translate(2px, -2px); }
+            80% { background-color: var(--color-pixel); transform: translate(0,0); }
+            100% { background-color: var(--color-pixel); transform: translate(0,0); }
+        }
+
+        /* 偶尔自动触发故障效果（模拟不稳定） */
+        .auto-glitch .pixel.on {
+            animation: pixel-glitch 0.2s 1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="logo-container" id="logoArea">
+        <div class="grid">
+            <!-- Row 1: . X X X . -->
+            <div class="pixel"></div>
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+            <div class="pixel"></div>
+
+            <!-- Row 2: X X . X X (Hole start) -->
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+            <div class="pixel"></div> <!-- Hole -->
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+
+            <!-- Row 3: X X X X X (Crossbar) -->
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+
+            <!-- Row 4: X X . X X (Legs) -->
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+            <div class="pixel"></div>
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+
+            <!-- Row 5: X X . X X (Legs) -->
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+            <div class="pixel"></div>
+            <div class="pixel on"></div>
+            <div class="pixel on"></div>
+        </div>
+    </div>
+
+    <div class="brand-name">Abandon Inc.</div>
+
+    <script>
+        // JS 仅用于增强体验：随机触发自动故障效果，模拟赛博朋克氛围
+        const logo = document.getElementById('logoArea');
+        
+        function triggerRandomGlitch() {
+            // 10% 概率触发，或者每隔几秒触发
+            if (Math.random() > 0.7) {
+                logo.classList.add('auto-glitch');
+                setTimeout(() => {
+                    logo.classList.remove('auto-glitch');
+                }, 200); // 故障持续 200ms
+            }
+            
+            // 下一次检查的时间随机
+            setTimeout(triggerRandomGlitch, Math.random() * 3000 + 1000);
+        }
+
+        // 启动随机故障循环
+        setTimeout(triggerRandomGlitch, 2000);
+
+        // 点击重新播放入场动画
+        logo.addEventListener('click', () => {
+            const pixels = document.querySelectorAll('.pixel.on');
+            pixels.forEach(p => {
+                p.style.animation = 'none';
+                p.offsetHeight; /* trigger reflow */
+                p.style.animation = null; 
+            });
+        });
+    </script>
+</body>
+</html>
