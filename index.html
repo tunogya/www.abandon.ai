@@ -3,36 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abandon Inc. Pixel Logo</title>
+    <title>Abandon Inc. - Quantum Trading in Bitcoin</title>
     <style>
         :root {
-            --pixel-size: 40px; /* 单个像素的大小，可在此调整缩放 */
+            --pixel-size: 40px;
             --color-bg: #050505;
             --color-pixel: #FFFFFF;
-            --color-glitch-1: #0ff; /* 青色故障 */
-            --color-glitch-2: #f0f; /* 洋红色故障 */
+            --color-glitch-1: #0ff;
+            --color-glitch-2: #f0f;
+            --color-btc: #f7931a;
+            --color-accent: #00ff88;
             --anim-speed: 0.8s;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             background-color: var(--color-bg);
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+            color: #fff;
+            position: relative;
+        }
+
+        /* 动态背景网格 */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* 浮动粒子效果 */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--color-accent);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* 主容器 */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
-            color: #444;
+            text-align: center;
+            padding: 80px 20px;
         }
 
-        /* 容器：保持Logo居中并添加发光效果 */
+        /* Logo容器 */
         .logo-container {
             position: relative;
             padding: 20px;
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+            filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.3));
             transition: transform 0.3s ease;
+            margin-bottom: 60px;
         }
 
         /* 5x5 网格系统 */
@@ -75,14 +151,246 @@
 
         /* 公司名称 */
         .brand-name {
-            margin-top: 40px;
-            font-size: 1.2rem;
-            letter-spacing: 4px;
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -2px;
             text-transform: uppercase;
-            color: #888;
+            background: linear-gradient(135deg, #fff, var(--color-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             opacity: 0;
             animation: fadeIn 1s ease-out 1s forwards;
+            margin-bottom: 20px;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: #888;
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.3s forwards;
+            margin-bottom: 40px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.6s forwards;
+            margin-bottom: 60px;
+        }
+
+        /* CTA按钮 */
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.9s forwards;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-accent), #00cc6f);
+            color: #000;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--color-accent);
+        }
+
+        /* 数据展示区 */
+        .stats-section {
+            padding: 100px 20px;
+            background: linear-gradient(180deg, transparent, rgba(0, 255, 136, 0.03), transparent);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 40px 30px;
             text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--color-accent);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--color-btc), #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* 特性区块 */
+        .features-section {
+            padding: 100px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #fff, var(--color-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 50px 40px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-10px);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .feature-desc {
+            color: #999;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px 20px 40px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 100px;
+        }
+
+        .footer-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .brand-name {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            :root {
+                --pixel-size: 30px;
+            }
         }
 
         /* --- 动画关键帧 --- */
@@ -143,74 +451,279 @@
 </head>
 <body>
 
-    <div class="logo-container" id="logoArea">
-        <div class="grid">
-            <!-- Row 1: . X X X . -->
-            <div class="pixel"></div>
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
-            <div class="pixel"></div>
+    <!-- 背景效果 -->
+    <div class="bg-grid"></div>
+    <div class="particles" id="particles"></div>
 
-            <!-- Row 2: X X . X X (Hole start) -->
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
-            <div class="pixel"></div> <!-- Hole -->
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="logo-container" id="logoArea">
+                <div class="grid">
+                    <!-- Row 1: . X X X . -->
+                    <div class="pixel"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel"></div>
 
-            <!-- Row 3: X X X X X (Crossbar) -->
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
+                    <!-- Row 2: X X . X X (Hole start) -->
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
 
-            <!-- Row 4: X X . X X (Legs) -->
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
-            <div class="pixel"></div>
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
+                    <!-- Row 3: X X X X X (Crossbar) -->
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
 
-            <!-- Row 5: X X . X X (Legs) -->
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
-            <div class="pixel"></div>
-            <div class="pixel on"></div>
-            <div class="pixel on"></div>
+                    <!-- Row 4: X X . X X (Legs) -->
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+
+                    <!-- Row 5: X X . X X (Legs) -->
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel"></div>
+                    <div class="pixel on"></div>
+                    <div class="pixel on"></div>
+                </div>
+            </div>
+
+            <h1 class="brand-name">Abandon Inc.</h1>
+            <p class="tagline">Quantum Trading in Bitcoin</p>
+            <p class="subtitle">利用前沿量化算法和人工智能技术，在比特币市场中发现并捕获alpha收益</p>
+
+            <div class="cta-buttons">
+                <button class="btn btn-primary">探索策略</button>
+                <button class="btn btn-secondary">联系我们</button>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="brand-name">Abandon Inc.</div>
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" data-target="247">0</div>
+                    <div class="stat-label">日均交易量 (BTC)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="99.7">0</div>
+                    <div class="stat-label">系统正常运行时间 (%)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="42">0</div>
+                    <div class="stat-label">年化收益率 (%)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="0.8">0</div>
+                    <div class="stat-label">夏普比率</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">核心优势</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">超低延迟执行</h3>
+                    <p class="feature-desc">自研交易引擎，微秒级订单执行，直连全球主流交易所，确保在瞬息万变的市场中抢占先机。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="feature-title">AI驱动策略</h3>
+                    <p class="feature-desc">深度学习模型实时分析链上数据、市场情绪和宏观指标，自动调整交易参数以适应市场环境。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">风险管理</h3>
+                    <p class="feature-desc">多层次风控体系，动态调整仓位，实时监控市场异常，确保在极端行情下保护资产安全。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">透明化报告</h3>
+                    <p class="feature-desc">实时监控面板，完整的交易记录和绩效分析，让您随时掌握投资组合表现。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3 class="feature-title">安全托管</h3>
+                    <p class="feature-desc">采用冷热钱包分离、多重签名技术，与顶级托管机构合作，确保资产安全。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="feature-title">全球流动性</h3>
+                    <p class="feature-desc">聚合全球顶级交易所流动性，智能路由订单，获取最优执行价格。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">&copy; 2026 Abandon Inc. All rights reserved. | Quantum Trading in Bitcoin</p>
+        </div>
+    </footer>
 
     <script>
-        // JS 仅用于增强体验：随机触发自动故障效果，模拟赛博朋克氛围
+        // 粒子系统
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+
+                const size = Math.random() * 4 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDuration = `${Math.random() * 10 + 15}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Logo故障效果
         const logo = document.getElementById('logoArea');
-        
+
         function triggerRandomGlitch() {
-            // 10% 概率触发，或者每隔几秒触发
             if (Math.random() > 0.7) {
                 logo.classList.add('auto-glitch');
                 setTimeout(() => {
                     logo.classList.remove('auto-glitch');
-                }, 200); // 故障持续 200ms
+                }, 200);
             }
-            
-            // 下一次检查的时间随机
             setTimeout(triggerRandomGlitch, Math.random() * 3000 + 1000);
         }
 
-        // 启动随机故障循环
-        setTimeout(triggerRandomGlitch, 2000);
-
-        // 点击重新播放入场动画
+        // 点击Logo重播动画
         logo.addEventListener('click', () => {
             const pixels = document.querySelectorAll('.pixel.on');
             pixels.forEach(p => {
                 p.style.animation = 'none';
-                p.offsetHeight; /* trigger reflow */
-                p.style.animation = null; 
+                p.offsetHeight;
+                p.style.animation = null;
+            });
+        });
+
+        // 数字滚动动画
+        function animateNumber(element, target, duration = 2000) {
+            const start = 0;
+            const startTime = performance.now();
+            const isDecimal = target % 1 !== 0;
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // 缓动函数
+                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                const current = start + (target - start) * easeOutQuart;
+
+                element.textContent = isDecimal ? current.toFixed(1) : Math.floor(current);
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // 交叉观察器 - 当元素进入视口时触发动画
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const numbers = entry.target.querySelectorAll('.stat-number');
+                    numbers.forEach(num => {
+                        const target = parseFloat(num.dataset.target);
+                        animateNumber(num, target);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // 按钮点击事件
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const ripple = document.createElement('span');
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+                ripple.style.pointerEvents = 'none';
+
+                btn.style.position = 'relative';
+                btn.style.overflow = 'hidden';
+                btn.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // 添加波纹动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            setTimeout(triggerRandomGlitch, 2000);
+
+            // 观察统计数字区块
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) {
+                observer.observe(statsSection);
+            }
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             });
         });
     </script>
