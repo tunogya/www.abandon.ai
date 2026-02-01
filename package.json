@@ -16,7 +16,6 @@
 	"dependencies": {
 		"hono": "^4.11.7",
 		"isbot": "^5.1.31",
-		"partysocket": "1.1.11",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"react-router": "^7.10.0",
@@ -29,7 +28,6 @@
 		"@types/node": "^22",
 		"@types/react": "^19.1.13",
 		"@types/react-dom": "^19.1.9",
-		"partykit": "0.0.115",
 		"tailwindcss": "^4.1.13",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7",
