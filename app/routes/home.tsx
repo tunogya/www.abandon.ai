@@ -61,42 +61,18 @@ export default function Home() {
               <div className="p-3 bg-background border border-accents-2 rounded-md">
                 <strong className="block text-foreground mb-2">Create Virus</strong>
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <code className="bg-accents-2 px-2 py-1 rounded text-xs text-foreground font-mono break-all flex-1">
-                      {API_ENDPOINTS.VIRUS}
-                    </code>
-                    <button
-                      onClick={() => navigator.clipboard.writeText(API_ENDPOINTS.VIRUS)}
-                      className="text-accents-5 hover:text-success transition-colors shrink-0"
-                      title="Copy URL"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                      </svg>
-                    </button>
-                  </div>
+                  <code className="bg-accents-2 px-2 py-1 rounded text-xs text-foreground font-mono break-all block">
+                    {API_ENDPOINTS.VIRUS}
+                  </code>
                   <span className="text-xs">POST with PoW (difficulty 3-10)</span>
                 </div>
               </div>
               <div className="p-3 bg-background border border-accents-2 rounded-md">
                 <strong className="block text-foreground mb-2">Create Vaccine</strong>
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <code className="bg-accents-2 px-2 py-1 rounded text-xs text-foreground font-mono break-all flex-1">
-                      {API_ENDPOINTS.VACCINE}
-                    </code>
-                    <button
-                      onClick={() => navigator.clipboard.writeText(API_ENDPOINTS.VACCINE)}
-                      className="text-accents-5 hover:text-success transition-colors shrink-0"
-                      title="Copy URL"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                      </svg>
-                    </button>
-                  </div>
+                  <code className="bg-accents-2 px-2 py-1 rounded text-xs text-foreground font-mono break-all block">
+                    {API_ENDPOINTS.VACCINE}
+                  </code>
                   <span className="text-xs">POST to eliminate a virus</span>
                 </div>
               </div>

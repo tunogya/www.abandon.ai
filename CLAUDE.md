@@ -22,7 +22,7 @@ npm install
 npm run dev:api
 
 # Start React Router dev server (runs on localhost:5173)
-npm run dev
+npm run dev:frontend
 
 # Type checking
 npm run typecheck
