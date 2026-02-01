@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { useGameState } from "../hooks/useGameState";
+import { useGameStateRest } from "../hooks/useGameStateRest";
 import { StatsDashboard } from "../components/StatsDashboard";
 import { VirusList } from "../components/VirusList";
 
@@ -11,7 +11,7 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const { activeViruses, stats, connected, error } = useGameState();
+  const { activeViruses, stats, loading, error, refresh, lastUpdated } = useGameStateRest();
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-success selection:text-white">
@@ -43,7 +43,7 @@ export default function Home() {
         )}
 
         {/* Stats Dashboard */}
-        <StatsDashboard stats={stats} connected={connected} />
+        <StatsDashboard stats={stats} loading={loading} />
 
         {/* Active Viruses */}
         <VirusList viruses={activeViruses} />
@@ -59,12 +59,12 @@ export default function Home() {
             <div className="space-y-4 text-sm text-accents-5">
               <div className="p-3 bg-background border border-accents-2 rounded-md">
                 <strong className="block text-foreground mb-1">Create Virus</strong>
-                POST to <code className="bg-accents-2 px-1 py-0.5 rounded text-xs text-foreground font-mono">/party/virus</code><br />
+                POST to <code className="bg-accents-2 px-1 py-0.5 rounded text-xs text-foreground font-mono">/api/virus</code><br />
                 with PoW (difficulty 3-10)
               </div>
               <div className="p-3 bg-background border border-accents-2 rounded-md">
                 <strong className="block text-foreground mb-1">Create Vaccine</strong>
-                POST to <code className="bg-accents-2 px-1 py-0.5 rounded text-xs text-foreground font-mono">/party/vaccine</code><br />
+                POST to <code className="bg-accents-2 px-1 py-0.5 rounded text-xs text-foreground font-mono">/api/vaccine</code><br />
                 to eliminate a virus
               </div>
               <p className="pt-2">
@@ -137,7 +137,7 @@ export default function Home() {
             abandon.ai
           </div>
           <p className="text-sm text-accents-5 max-w-md">
-            Built with React Router 7 + PartyKit + PoW + Game Theory. <br />
+            Built with React Router 7 + Cloudflare Workers + Hono + D1 + PoW + Game Theory. <br />
             A simulation to understand the dynamics of AI safety and proliferation.
           </p>
           <div className="flex gap-4 mt-2">

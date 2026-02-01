@@ -2,21 +2,21 @@ import type { GameStats } from '../types';
 
 interface StatsDashboardProps {
   stats: GameStats;
-  connected: boolean;
+  loading: boolean;
 }
 
-export function StatsDashboard({ stats, connected }: StatsDashboardProps) {
+export function StatsDashboard({ stats, loading }: StatsDashboardProps) {
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold tracking-tight text-foreground">Game Statistics</h2>
         <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-accents-2 bg-accents-1">
           <div
-            className={`w-2 h-2 rounded-full ${connected ? 'bg-success' : 'bg-error'
+            className={`w-2 h-2 rounded-full ${!loading ? 'bg-success' : 'bg-warning'
               }`}
           />
           <span className="text-xs font-medium text-accents-5">
-            {connected ? 'Connected' : 'Disconnected'}
+            {loading ? 'Loading...' : 'Live'}
           </span>
         </div>
       </div>

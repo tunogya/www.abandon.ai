@@ -4,12 +4,9 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "website-abandon-ai",
-	"compatibility_date": "2025-04-04",
-	"main": "./workers/app.ts",
-	"vars": {
-		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
-	},
+	"name": "abandon-ai-api",
+	"compatibility_date": "2026-02-01",
+	"main": "./workers/api/index.ts",
 	"observability": {
 		"enabled": true
 	},

@@ -41,8 +41,10 @@ export function useGameState() {
     });
 
     partySocket.addEventListener('message', (event) => {
+      console.log('📨 Received message:', event.data);
       try {
         const message = JSON.parse(event.data) as ServerMessage;
+        console.log('✅ Parsed message type:', message.type, message);
 
         switch (message.type) {
           case 'STATUS_UPDATE':
