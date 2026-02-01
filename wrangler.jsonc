@@ -15,6 +15,12 @@
 			"binding": "abandon_ai_db",
 			"database_name": "abandon-ai-db",
 			"database_id": "426355b2-ae29-4438-96f3-03a879abd5f8"
+		},
+	],
+	"routes": [
+		{
+			"pattern": "api.abandon.ai/*",
+			"zone_name": "abandon.ai"
 		}
 	]
 	/**

@@ -118,12 +118,251 @@ npm run dev
 # Build frontend
 npm run build
 
-# Deploy Workers API
-npm run deploy:api
-
-# Deploy frontend (if using Cloudflare Pages)
-wrangler pages deploy ./build/client
+# Type checking
+npm run typecheck
 ```
+
+---
+
+## 🚢 Deployment
+
+### Prerequisites
+
+Before deploying, ensure you have:
+
+1. **Cloudflare Account** - Sign up at [cloudflare.com](https://cloudflare.com)
+2. **Wrangler CLI** - Already included in dependencies
+3. **Wrangler Authentication** - Run `npx wrangler login` to authenticate
+
+### Step 1: Setup Cloudflare D1 Database
+
+1. **Create D1 Database:**
+```bash
+# Create a new D1 database
+npx wrangler d1 create abandon-ai-db
+```
+
+2. **Update wrangler.jsonc:**
+
+Copy the database ID from the output and update `wrangler.jsonc`:
+
+```jsonc
+{
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "abandon-ai-db",
+      "database_id": "your-database-id-here"  // Replace with actual ID
+    }
+  ]
+}
+```
+
+3. **Run Database Migrations:**
+```bash
+# Apply the initial schema
+npx wrangler d1 execute abandon-ai-db --file=./schema.sql
+
+# Or use migrations directory
+npx wrangler d1 migrations apply abandon-ai-db
+```
+
+4. **Verify Database Setup:**
+```bash
+# List all tables
+npx wrangler d1 execute abandon-ai-db --command "SELECT name FROM sqlite_master WHERE type='table'"
+
+# Check viruses table
+npx wrangler d1 execute abandon-ai-db --command "SELECT * FROM viruses LIMIT 5"
+```
+
+### Step 2: Deploy Backend (Cloudflare Workers API)
+
+1. **Configure Worker Routes:**
+
+Update `wrangler.jsonc` with your production route:
+
+```jsonc
+{
+  "name": "abandon-ai-api",
+  "main": "workers/api/index.ts",
+  "compatibility_date": "2024-01-01",
+  "routes": [
+    { "pattern": "api.abandon.ai/*", "zone_name": "abandon.ai" }
+  ]
+}
+```
+
+2. **Deploy Workers API:**
+```bash
+npm run deploy:api
+```
+
+This deploys the Hono API to Cloudflare Workers. The API will be available at your configured route (e.g., `https://api.abandon.ai`).
+
+3. **Verify Deployment:**
+```bash
+# Test the status endpoint
+curl https://api.abandon.ai/api/status
+
+# Check Workers logs
+npx wrangler tail abandon-ai-api
+```
+
+### Step 3: Deploy Frontend (Cloudflare Pages)
+
+#### Option A: Using Wrangler CLI (Manual)
+
+1. **Build the Frontend:**
+```bash
+npm run build
+```
+
+2. **Deploy to Cloudflare Pages:**
+```bash
+npx wrangler pages deploy ./build/client --project-name=abandon-ai
+```
+
+3. **Set Custom Domain (Optional):**
+```bash
+# Via Cloudflare Dashboard:
+# Pages → abandon-ai → Custom domains → Add domain
+```
+
+#### Option B: Using GitHub Integration (Recommended)
+
+1. **Connect Repository to Cloudflare Pages:**
+   - Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
+   - Navigate to **Pages** → **Create a project**
+   - Connect your GitHub repository: `tunogya/www.abandon.ai`
+
+2. **Configure Build Settings:**
+   - **Framework preset:** None
+   - **Build command:** `npm run build`
+   - **Build output directory:** `build/client`
+   - **Root directory:** `/`
+   - **Node version:** `20`
+
+3. **Set Environment Variables:**
+   - `NODE_VERSION`: `20`
+
+4. **Deploy:**
+   - Click **Save and Deploy**
+   - Cloudflare Pages will automatically deploy on every push to `main`
+
+### Step 4: Configure API URL
+
+Update the frontend API endpoint if using a custom domain:
+
+1. **Edit `app/hooks/useGameStateRest.ts`:**
+```typescript
+const API_BASE_URL =
+  typeof window !== "undefined"
+    ? window.location.hostname === "localhost"
+      ? "http://localhost:8787"
+      : "https://api.abandon.ai"  // Your production API URL
+    : "http://localhost:8787";
+```
+
+2. **Rebuild and redeploy:**
+```bash
+npm run build
+npx wrangler pages deploy ./build/client --project-name=abandon-ai
+```
+
+### Step 5: Verify Production Deployment
+
+1. **Test Frontend:**
+   - Visit `https://abandon.ai` (or your custom domain)
+   - Check that the page loads and displays statistics
+   - Verify virus/vaccine lists are populated
+
+2. **Test API Endpoints:**
+```bash
+# Check status endpoint
+curl https://api.abandon.ai/api/status
+
+# Check history endpoint
+curl https://api.abandon.ai/api/history?limit=10
+
+# Test virus creation (with valid PoW)
+curl -X POST https://api.abandon.ai/api/virus \
+  -H "Content-Type: application/json" \
+  -d '{"address":"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb","timestamp":1738454400,"nonce":12345,"difficulty":5,"memo":""}'
+```
+
+3. **Monitor Logs:**
+```bash
+# Workers API logs
+npx wrangler tail abandon-ai-api
+
+# Pages deployment logs
+# Available in Cloudflare Dashboard → Pages → abandon-ai → Deployments
+```
+
+### Step 6: Database Maintenance
+
+**Backup Database:**
+```bash
+# Export all viruses
+npx wrangler d1 execute abandon-ai-db --command "SELECT * FROM viruses" > backup_viruses.json
+
+# Export all vaccines
+npx wrangler d1 execute abandon-ai-db --command "SELECT * FROM vaccines" > backup_vaccines.json
+```
+
+**View Database Stats:**
+```bash
+# Count total viruses
+npx wrangler d1 execute abandon-ai-db --command "SELECT COUNT(*) as total FROM viruses"
+
+# Count active viruses
+npx wrangler d1 execute abandon-ai-db --command "SELECT COUNT(*) as active FROM viruses WHERE status='active'"
+
+# Top creators
+npx wrangler d1 execute abandon-ai-db --command "SELECT created_by, COUNT(*) as count FROM viruses GROUP BY created_by ORDER BY count DESC LIMIT 10"
+```
+
+### Deployment Checklist
+
+- [ ] Cloudflare account created and authenticated
+- [ ] D1 database created and configured in `wrangler.jsonc`
+- [ ] Database schema applied via migrations
+- [ ] Workers API deployed and accessible
+- [ ] Frontend built successfully (`npm run build`)
+- [ ] Frontend deployed to Cloudflare Pages
+- [ ] Custom domain configured (optional)
+- [ ] API URL updated in frontend code
+- [ ] All endpoints tested and working
+- [ ] Database populated with test data
+- [ ] Monitoring and logs configured
+
+### Deployment URLs
+
+After successful deployment, your application will be available at:
+
+- **Frontend:** `https://abandon.ai` (or `https://abandon-ai.pages.dev`)
+- **API:** `https://api.abandon.ai`
+- **Pages Dashboard:** `https://dash.cloudflare.com/?to=/:account/pages`
+- **Workers Dashboard:** `https://dash.cloudflare.com/?to=/:account/workers`
+
+### Rollback Procedure
+
+If you need to rollback a deployment:
+
+**Workers API:**
+```bash
+# View deployment history
+npx wrangler deployments list
+
+# Rollback to previous version
+npx wrangler rollback --message "Rolling back to previous version"
+```
+
+**Cloudflare Pages:**
+- Go to Cloudflare Dashboard → Pages → abandon-ai → Deployments
+- Find the previous working deployment
+- Click **Rollback to this deployment**
 
 ---
 

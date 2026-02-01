@@ -3,15 +3,16 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"build": "react-router build",
-		"cf-typegen": "wrangler types",
-		"deploy": "npm run build && wrangler deploy",
-		"deploy:api": "wrangler deploy",
-		"dev": "react-router dev",
+		"dev:frontend": "react-router dev",
 		"dev:api": "wrangler dev",
-		"postinstall": "npm run cf-typegen",
-		"preview": "npm run build && vite preview",
-		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
+		"build:frontend": "react-router build",
+		"preview": "npm run build:frontend && vite preview",
+		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
+		"deploy:frontend": "npm run build:frontend && wrangler pages deploy ./build/client",
+		"deploy:api": "wrangler deploy",
+		"deploy:all": "npm run deploy:api && npm run deploy:frontend",
+		"cf-typegen": "wrangler types",
+		"postinstall": "npm run cf-typegen"
 	},
 	"dependencies": {
 		"hono": "^4.11.7",
