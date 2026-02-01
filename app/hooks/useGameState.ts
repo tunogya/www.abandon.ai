@@ -26,13 +26,8 @@ export function useGameState() {
   const [socket, setSocket] = useState<PartySocket | null>(null);
 
   useEffect(() => {
-    // Determine PartyKit host based on environment
-    const isLocalhost = typeof window !== 'undefined' &&
-      window.location.hostname === 'localhost';
-
-    const host = isLocalhost
-      ? 'localhost:1999'
-      : 'www-abandon-ai-party.tunogya.partykit.dev';
+    // Always use production PartyKit server
+    const host = 'www-abandon-ai-party.tunogya.partykit.dev';
 
     // Create PartySocket connection
     const partySocket = new PartySocket({
