@@ -108,7 +108,7 @@ npm run dev:api
 
 **Terminal 2 - React Router Frontend:**
 ```bash
-npm run dev
+npm run dev:frontend
 # Runs on http://localhost:5173
 ```
 
@@ -116,10 +116,13 @@ npm run dev
 
 ```bash
 # Build frontend
-npm run build
+npm run build:frontend
 
 # Type checking
 npm run typecheck
+
+# Deploy both API and frontend
+npm run deploy:all
 ```
 
 ---
@@ -215,7 +218,7 @@ npx wrangler tail abandon-ai-api
 
 1. **Build the Frontend:**
 ```bash
-npm run build
+npm run build:frontend
 ```
 
 2. **Deploy to Cloudflare Pages:**
@@ -233,19 +236,16 @@ npx wrangler pages deploy ./build/client --project-name=abandon-ai
 
 Update the frontend API endpoint if using a custom domain:
 
-1. **Edit `app/hooks/useGameStateRest.ts`:**
+1. **Edit `app/config/api.ts`:**
 ```typescript
-const API_BASE_URL =
-  typeof window !== "undefined"
-    ? window.location.hostname === "localhost"
-      ? "http://localhost:8787"
-      : "https://api.abandon.ai"  // Your production API URL
-    : "http://localhost:8787";
+export const API_BASE = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+  ? 'http://localhost:8787'
+  : 'https://api.abandon.ai';  // Your production API URL
 ```
 
 2. **Rebuild and redeploy:**
 ```bash
-npm run build
+npm run build:frontend
 npx wrangler pages deploy ./build/client --project-name=abandon-ai
 ```
 
@@ -597,6 +597,8 @@ abandon.ai/
 │   │   └── VirusList.tsx         # Virus list component
 │   ├── hooks/
 │   │   └── useGameStateRest.ts   # REST polling hook
+│   ├── config/
+│   │   └── api.ts                # API endpoint configuration
 │   └── root.tsx                  # Root layout
 │
 ├── workers/api/                  # Cloudflare Workers API
@@ -678,7 +680,7 @@ CREATE INDEX idx_vaccines_target ON vaccines(target);
 
 ### Environment Variables
 
-No environment variables needed for local development. The frontend automatically detects the API URL:
+No environment variables needed for local development. The frontend automatically detects the API URL via `app/config/api.ts`:
 
 - **localhost:** `http://localhost:8787`
 - **production:** `https://api.abandon.ai`
