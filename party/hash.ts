@@ -2,30 +2,30 @@
 
 /**
  * Calculate virus hash using SHA-256
- * Format: SHA256("virus:{walletAddress}:{timestamp}:{nonce}:{difficulty}:{memo}")
+ * Format: SHA256("virus:{address}:{timestamp}:{nonce}:{difficulty}:{memo}")
  */
 export async function calculateVirusHash(
-  walletAddress: string,
+  address: string,
   timestamp: number,
   nonce: number,
   difficulty: number,
   memo: string = ''
 ): Promise<string> {
-  const data = `virus:${walletAddress}:${timestamp}:${nonce}:${difficulty}:${memo}`;
+  const data = `virus:${address}:${timestamp}:${nonce}:${difficulty}:${memo}`;
   return sha256(data);
 }
 
 /**
  * Calculate vaccine hash using SHA-256
- * Format: SHA256("vaccine:{walletAddress}:{targetVirusHash}:{timestamp}:{nonce}")
+ * Format: SHA256("vaccine:{address}:{target}:{timestamp}:{nonce}")
  */
 export async function calculateVaccineHash(
-  walletAddress: string,
-  targetVirusHash: string,
+  address: string,
+  target: string,
   timestamp: number,
   nonce: number
 ): Promise<string> {
-  const data = `vaccine:${walletAddress}:${targetVirusHash}:${timestamp}:${nonce}`;
+  const data = `vaccine:${address}:${target}:${timestamp}:${nonce}`;
   return sha256(data);
 }
 
@@ -42,7 +42,7 @@ export function verifyPoW(hash: string, difficulty: number): boolean {
  * Validate virus hash with PoW verification
  */
 export async function validateVirusHash(
-  walletAddress: string,
+  address: string,
   timestamp: number,
   nonce: number,
   difficulty: number,
@@ -71,7 +71,7 @@ export async function validateVirusHash(
     };
   }
 
-  const hash = await calculateVirusHash(walletAddress, timestamp, nonce, difficulty, memo);
+  const hash = await calculateVirusHash(address, timestamp, nonce, difficulty, memo);
 
   if (!verifyPoW(hash, difficulty)) {
     return {
@@ -88,13 +88,13 @@ export async function validateVirusHash(
  * Vaccine must meet the same difficulty as the target virus
  */
 export async function validateVaccineHash(
-  walletAddress: string,
-  targetVirusHash: string,
+  address: string,
+  target: string,
   timestamp: number,
   nonce: number,
   targetDifficulty: number
 ): Promise<{ valid: boolean; hash?: string; error?: string }> {
-  const hash = await calculateVaccineHash(walletAddress, targetVirusHash, timestamp, nonce);
+  const hash = await calculateVaccineHash(address, target, timestamp, nonce);
 
   if (!verifyPoW(hash, targetDifficulty)) {
     return {

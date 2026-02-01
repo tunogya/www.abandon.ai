@@ -6,15 +6,15 @@ import { verifyMessage } from 'viem';
  */
 export function generateSignMessage(
   action: 'create_virus' | 'create_vaccine',
-  walletAddress: string,
+  address: string,
   timestamp: number,
   nonce: number,
-  additionalData?: { difficulty?: number; memo?: string; targetVirusHash?: string }
+  additionalData?: { difficulty?: number; memo?: string; target?: string }
 ): string {
   if (action === 'create_virus') {
-    return `abandon.ai - Create Virus\n\nWallet: ${walletAddress}\nTimestamp: ${timestamp}\nNonce: ${nonce}\nDifficulty: ${additionalData?.difficulty || 0}\nMemo: ${additionalData?.memo || ''}`;
+    return `abandon.ai - Create Virus\n\nWallet: ${address}\nTimestamp: ${timestamp}\nNonce: ${nonce}\nDifficulty: ${additionalData?.difficulty || 0}\nMemo: ${additionalData?.memo || ''}`;
   } else {
-    return `abandon.ai - Create Vaccine\n\nWallet: ${walletAddress}\nTarget Virus: ${additionalData?.targetVirusHash || ''}\nTimestamp: ${timestamp}\nNonce: ${nonce}`;
+    return `abandon.ai - Create Vaccine\n\nWallet: ${address}\nTarget Virus: ${additionalData?.target || ''}\nTimestamp: ${timestamp}\nNonce: ${nonce}`;
   }
 }
 
@@ -43,34 +43,34 @@ export async function verifySignature(
  * Verify virus creation request signature
  */
 export async function verifyVirusSignature(
-  walletAddress: string,
+  address: string,
   timestamp: number,
   nonce: number,
   difficulty: number,
   memo: string = '',
   signature: string
 ): Promise<boolean> {
-  const message = generateSignMessage('create_virus', walletAddress, timestamp, nonce, {
+  const message = generateSignMessage('create_virus', address, timestamp, nonce, {
     difficulty,
     memo,
   });
-  return verifySignature(message, signature, walletAddress);
+  return verifySignature(message, signature, address);
 }
 
 /**
  * Verify vaccine creation request signature
  */
 export async function verifyVaccineSignature(
-  walletAddress: string,
-  targetVirusHash: string,
+  address: string,
+  target: string,
   timestamp: number,
   nonce: number,
   signature: string
 ): Promise<boolean> {
-  const message = generateSignMessage('create_vaccine', walletAddress, timestamp, nonce, {
-    targetVirusHash,
+  const message = generateSignMessage('create_vaccine', address, timestamp, nonce, {
+    target,
   });
-  return verifySignature(message, signature, walletAddress);
+  return verifySignature(message, signature, address);
 }
 
 /**

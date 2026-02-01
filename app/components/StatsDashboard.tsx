@@ -38,8 +38,8 @@ export function StatsDashboard({ stats, connected }: StatsDashboardProps) {
           icon="💉"
         />
         <StatCard
-          label="Unique Agents"
-          value={stats.uniqueAgents}
+          label="Unique Addresses"
+          value={stats.uniqueAddresses}
           icon="🤖"
         />
       </div>

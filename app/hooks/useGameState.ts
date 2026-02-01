@@ -16,7 +16,7 @@ const initialStats: GameStats = {
   totalVaccinesCreated: 0,
   successfulVaccines: 0,
   failedVaccines: 0,
-  uniqueAgents: 0,
+  uniqueAddresses: 0,
 };
 
 export function useGameState() {
@@ -31,7 +31,7 @@ export function useGameState() {
   useEffect(() => {
     // Determine PartyKit host based on environment
     const isLocalhost = typeof window !== 'undefined' &&
-                        window.location.hostname === 'localhost';
+      window.location.hostname === 'localhost';
 
     const host = isLocalhost
       ? 'localhost:1999'

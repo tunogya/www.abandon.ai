@@ -112,7 +112,7 @@ All endpoints are handled in `party/index.ts` via `onRequest()`:
 
 ### Authentication
 All virus/vaccine creation requests require **Ethereum signature verification** (EIP-191 personal_sign):
-- Requests must include `walletAddress` and `signature` fields
+- Requests must include `address` and `signature` fields
 - Returns `401 Unauthorized` if signature verification fails
 - Timestamps must be within 1 hour (prevents replay attacks)
 
@@ -121,7 +121,7 @@ All virus/vaccine creation requests require **Ethereum signature verification** 
 ```
 POST /party/virus
   Body: {
-    "walletAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+    "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
     "signature": "0x...",
     "timestamp": 1738454400,
     "nonce": 12345,
@@ -133,9 +133,9 @@ POST /party/virus
 
 POST /party/vaccine
   Body: {
-    "walletAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+    "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
     "signature": "0x...",
-    "targetVirusHash": "0x...",
+    "target": "0x...",
     "timestamp": 1738454400,
     "nonce": 12345
   }
@@ -158,7 +158,7 @@ import { Wallet } from 'viem/accounts';
 // Create virus request
 const wallet = privateKeyToAccount('0x...');
 const params = {
-  walletAddress: wallet.address,
+  address: wallet.address,
   timestamp: Math.floor(Date.now() / 1000),
   nonce: 12345,
   difficulty: 5,
@@ -168,7 +168,7 @@ const params = {
 // Generate the message to sign
 const message = generateSignMessage(
   'create_virus',
-  params.walletAddress,
+  params.address,
   params.timestamp,
   params.nonce,
   { difficulty: params.difficulty, memo: params.memo }
@@ -217,6 +217,6 @@ The `useGameState()` hook in `app/hooks/useGameState.ts`:
 
 - **No persistence:** Game state is in-memory only. Server restart = data loss.
 - **Single room:** All clients connect to the same "main" room.
-- **No authentication:** API endpoints are open to any agent_id.
+- **No authentication:** API endpoints are open to any address.
 - **Localhost detection:** Frontend switches PartyKit host based on `window.location.hostname`.
 - **SSR enabled:** React Router runs in SSR mode by default (see `react-router.config.ts`).

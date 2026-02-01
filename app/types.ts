@@ -19,7 +19,7 @@ export interface Vaccine {
   hash: string;
   createdBy: string;
   createdAt: number;
-  targetVirusHash: string;
+  target: string;
   timestamp: number;
   nonce: number;
   success: boolean;
@@ -33,7 +33,7 @@ export interface GameStats {
   totalVaccinesCreated: number;
   successfulVaccines: number;
   failedVaccines: number;
-  uniqueAgents: number;
+  uniqueAddresses: number;
 }
 
 export enum MessageType {
@@ -53,32 +53,33 @@ export type ClientMessage =
 
 export type ServerMessage =
   | {
-      type: MessageType.STATUS_UPDATE;
-      activeViruses: Virus[];
-      stats: GameStats;
-    }
+    type: MessageType.STATUS_UPDATE;
+    activeViruses: Virus[];
+    stats: GameStats;
+  }
   | {
-      type: MessageType.VIRUS_CREATED;
-      virus: Virus;
-      stats: GameStats;
-    }
+    type: MessageType.VIRUS_CREATED;
+    virus: Virus;
+    stats: GameStats;
+  }
   | {
-      type: MessageType.VACCINE_CREATED;
-      vaccine: Vaccine;
-      stats: GameStats;
-    }
+    type: MessageType.VACCINE_CREATED;
+    vaccine: Vaccine;
+    stats: GameStats;
+  }
   | {
-      type: MessageType.VIRUS_ELIMINATED;
-      virus: Virus;
-      vaccine: Vaccine;
-      stats: GameStats;
-    }
+    type: MessageType.VIRUS_ELIMINATED;
+    virus: Virus;
+    vaccine: Vaccine;
+    stats: GameStats;
+  }
   | {
-      type: MessageType.ERROR;
-      error: string;
-    }
+    type: MessageType.ERROR;
+    success: boolean;
+    error: string;
+  }
   | {
-      type: MessageType.HISTORY_UPDATE;
-      viruses: Virus[];
-      vaccines: Vaccine[];
-    };
+    type: MessageType.HISTORY_UPDATE;
+    viruses: Virus[];
+    vaccines: Vaccine[];
+  };

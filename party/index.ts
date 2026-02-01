@@ -32,11 +32,11 @@ export default class Server implements Party.Server {
     totalVaccinesCreated: 0,
     successfulVaccines: 0,
     failedVaccines: 0,
-    uniqueAgents: 0,
+    uniqueAddresses: 0,
   };
-  private uniqueAgents: Set<string> = new Set();
+  private uniqueAddresses: Set<string> = new Set();
 
-  constructor(readonly room: Party.Room) {}
+  constructor(readonly room: Party.Room) { }
 
   async onRequest(req: Party.Request): Promise<Response> {
     const url = new URL(req.url);
@@ -94,6 +94,7 @@ export default class Server implements Party.Server {
       return new Response("Not found", { status: 404, headers: corsHeaders });
     } catch (error) {
       const errorResponse: ErrorResponse = {
+        success: false,
         error: error instanceof Error ? error.message : "Unknown error",
       };
       return new Response(JSON.stringify(errorResponse), {
@@ -106,16 +107,16 @@ export default class Server implements Party.Server {
   async handleCreateVirus(
     body: CreateVirusRequest
   ): Promise<VirusResponse | ErrorResponse> {
-    const { walletAddress, signature, timestamp, nonce, difficulty, memo = "" } = body;
+    const { address, signature, timestamp, nonce, difficulty, memo = "" } = body;
 
     // Validate timestamp
     if (!isTimestampValid(timestamp)) {
-      return { error: "Timestamp out of acceptable range (must be within 1 hour)" };
+      return { success: false, error: "Timestamp out of acceptable range (must be within 1 hour)" };
     }
 
     // Verify signature
     const signatureValid = await verifyVirusSignature(
-      walletAddress,
+      address,
       timestamp,
       nonce,
       difficulty,
@@ -124,12 +125,12 @@ export default class Server implements Party.Server {
     );
 
     if (!signatureValid) {
-      return { error: "Invalid signature" };
+      return { success: false, error: "Invalid signature" };
     }
 
     // Validate PoW
     const validation = await validateVirusHash(
-      walletAddress,
+      address,
       timestamp,
       nonce,
       difficulty,
@@ -137,14 +138,14 @@ export default class Server implements Party.Server {
     );
 
     if (!validation.valid) {
-      return { error: validation.error || "Validation failed" };
+      return { success: false, error: validation.error || "Validation failed" };
     }
 
     // Create virus
     const virus: Virus = {
       id: this.generateId(),
       hash: validation.hash!,
-      createdBy: walletAddress,
+      createdBy: address,
       createdAt: Date.now(),
       timestamp,
       nonce,
@@ -154,10 +155,10 @@ export default class Server implements Party.Server {
     };
 
     this.viruses.set(virus.hash, virus);
-    this.uniqueAgents.add(walletAddress);
+    this.uniqueAddresses.add(address);
     this.stats.totalVirusesCreated++;
     this.stats.activeViruses++;
-    this.stats.uniqueAgents = this.uniqueAgents.size;
+    this.stats.uniqueAddresses = this.uniqueAddresses.size;
 
     // Broadcast to all connected clients
     const message: ServerMessage = {
@@ -177,56 +178,56 @@ export default class Server implements Party.Server {
   async handleCreateVaccine(
     body: CreateVaccineRequest
   ): Promise<VaccineResponse | ErrorResponse> {
-    const { walletAddress, signature, targetVirusHash, timestamp, nonce } = body;
+    const { address, signature, target, timestamp, nonce } = body;
 
     // Validate timestamp
     if (!isTimestampValid(timestamp)) {
-      return { error: "Timestamp out of acceptable range (must be within 1 hour)" };
+      return { success: false, error: "Timestamp out of acceptable range (must be within 1 hour)" };
     }
 
     // Check if target virus exists
-    const targetVirus = this.viruses.get(targetVirusHash);
+    const targetVirus = this.viruses.get(target);
     if (!targetVirus) {
-      return { error: "Target virus not found" };
+      return { success: false, error: "Target virus not found" };
     }
 
     if (targetVirus.status === "eliminated") {
-      return { error: "Target virus already eliminated" };
+      return { success: false, error: "Target virus already eliminated" };
     }
 
     // Verify signature
     const signatureValid = await verifyVaccineSignature(
-      walletAddress,
-      targetVirusHash,
+      address,
+      target,
       timestamp,
       nonce,
       signature
     );
 
     if (!signatureValid) {
-      return { error: "Invalid signature" };
+      return { success: false, error: "Invalid signature" };
     }
 
     // Validate PoW (must match target virus difficulty)
     const validation = await validateVaccineHash(
-      walletAddress,
-      targetVirusHash,
+      address,
+      target,
       timestamp,
       nonce,
       targetVirus.difficulty
     );
 
     if (!validation.valid) {
-      return { error: validation.error || "Validation failed" };
+      return { success: false, error: validation.error || "Validation failed" };
     }
 
     // Create vaccine
     const vaccine: Vaccine = {
       id: this.generateId(),
       hash: validation.hash!,
-      createdBy: walletAddress,
+      createdBy: address,
       createdAt: Date.now(),
-      targetVirusHash,
+      target,
       timestamp,
       nonce,
       success: true,
@@ -234,18 +235,18 @@ export default class Server implements Party.Server {
     };
 
     this.vaccines.push(vaccine);
-    this.uniqueAgents.add(walletAddress);
+    this.uniqueAddresses.add(address);
 
     // Eliminate virus
     targetVirus.status = "eliminated";
-    targetVirus.eliminatedBy = walletAddress;
+    targetVirus.eliminatedBy = address;
     targetVirus.eliminatedAt = Date.now();
 
     this.stats.totalVaccinesCreated++;
     this.stats.successfulVaccines++;
     this.stats.activeViruses--;
     this.stats.eliminatedViruses++;
-    this.stats.uniqueAgents = this.uniqueAgents.size;
+    this.stats.uniqueAddresses = this.uniqueAddresses.size;
 
     // Broadcast to all connected clients
     const message: ServerMessage = {
@@ -329,6 +330,7 @@ export default class Server implements Party.Server {
       console.error("Error handling message:", error);
       const errorResponse: ServerMessage = {
         type: MessageType.ERROR,
+        success: false,
         error: "Invalid message format",
       };
       sender.send(JSON.stringify(errorResponse));
