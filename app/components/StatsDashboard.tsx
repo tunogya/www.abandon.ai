@@ -43,24 +43,6 @@ export function StatsDashboard({ stats, connected }: StatsDashboardProps) {
           icon="🤖"
         />
       </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-        <StatCard
-          label="Total Vaccines"
-          value={stats.totalVaccinesCreated}
-          icon="💊"
-        />
-        <StatCard
-          label="Successful"
-          value={stats.successfulVaccines}
-          icon="✅"
-        />
-        <StatCard
-          label="Failed"
-          value={stats.failedVaccines}
-          icon="❌"
-        />
-      </div>
     </div>
   );
 }
