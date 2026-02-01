@@ -73,7 +73,7 @@ interface StatCardProps {
 
 function StatCard({ label, value, icon }: StatCardProps) {
   return (
-    <div className="group border border-accents-2 rounded-md p-4 bg-background hover:border-foreground transition-colors duration-200">
+    <div className="group border border-accents-2 rounded-md p-4 bg-background transition-colors duration-200">
       <div className="flex items-center justify-between mb-3">
         <span className="text-xl opacity-70 group-hover:opacity-100 transition-opacity">{icon}</span>
       </div>

@@ -40,7 +40,7 @@ export function Welcome() {
             <button className="h-12 px-8 rounded-md bg-foreground text-background font-medium text-base hover:bg-accents-7 transition-colors duration-200">
               Start Deploying
             </button>
-            <button className="h-12 px-8 rounded-md border border-accents-2 bg-background text-foreground font-medium text-base hover:border-foreground hover:text-foreground transition-all duration-200">
+            <button className="h-12 px-8 rounded-md border border-accents-2 bg-background text-foreground font-medium text-base hover:text-foreground transition-all duration-200">
               Get a Demo
             </button>
           </div>
@@ -95,7 +95,7 @@ export function Welcome() {
 
 function Card({ title, description, icon }: { title: string, description: string, icon: React.ReactNode }) {
   return (
-    <div className="group p-6 rounded-lg border border-accents-2 bg-background hover:border-foreground transition-colors duration-300 flex flex-col gap-3">
+    <div className="group p-6 rounded-lg border border-accents-2 bg-background transition-colors duration-300 flex flex-col gap-3">
       <div className="w-10 h-10 rounded-full bg-accents-1 flex items-center justify-center border border-accents-2 group-hover:bg-foreground group-hover:text-background transition-colors duration-300">
         {icon}
       </div>

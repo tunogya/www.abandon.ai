@@ -77,7 +77,7 @@ export default function Home() {
           <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* Virus Strategies */}
-            <div className="border border-accents-2 rounded-md p-6 hover:border-error transition-colors duration-300 group">
+            <div className="border border-accents-2 rounded-md p-6 transition-colors duration-300 group">
               <h3 className="text-lg font-bold tracking-tight mb-4 flex items-center gap-2 group-hover:text-error transition-colors">
                 <span>🦠</span> Virus Strategies
               </h3>
@@ -102,7 +102,7 @@ export default function Home() {
             </div>
 
             {/* Vaccine Strategies */}
-            <div className="border border-accents-2 rounded-md p-6 hover:border-success transition-colors duration-300 group">
+            <div className="border border-accents-2 rounded-md p-6 transition-colors duration-300 group">
               <h3 className="text-lg font-bold tracking-tight mb-4 flex items-center gap-2 group-hover:text-success transition-colors">
                 <span>💉</span> Vaccine Strategies
               </h3>

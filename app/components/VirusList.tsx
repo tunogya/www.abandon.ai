@@ -39,7 +39,7 @@ function VirusCard({ virus }: { virus: Virus }) {
   const memoText = virus.memo ? hexToText(virus.memo) : null;
 
   return (
-    <div className="group flex flex-col justify-between border border-accents-2 rounded-md p-5 bg-background hover:border-foreground transition-all duration-200">
+    <div className="group flex flex-col justify-between border border-accents-2 rounded-md p-5 bg-background transition-all duration-200">
       <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
