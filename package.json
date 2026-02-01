@@ -13,10 +13,11 @@
 	},
 	"dependencies": {
 		"isbot": "^5.1.31",
+		"partysocket": "1.1.11",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"react-router": "^7.10.0",
-		"partysocket": "1.1.11"
+		"viem": "^2.45.1"
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.13.5",
@@ -25,11 +26,11 @@
 		"@types/node": "^22",
 		"@types/react": "^19.1.13",
 		"@types/react-dom": "^19.1.9",
+		"partykit": "0.0.115",
 		"tailwindcss": "^4.1.13",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7",
 		"vite-tsconfig-paths": "^5.1.4",
-		"wrangler": "^4.61.1",
-		"partykit": "0.0.115"
+		"wrangler": "^4.61.1"
 	}
 }

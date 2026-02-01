@@ -1,90 +1,143 @@
-import logoDark from "./logo-dark.svg";
-import logoLight from "./logo-light.svg";
+import { Link } from "react-router";
 
-export function Welcome({ message }: { message: string }) {
+export function Welcome() {
   return (
-    <main className="flex items-center justify-center pt-16 pb-4">
-      <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <header className="flex flex-col items-center gap-9">
-          <div className="w-[500px] max-w-[100vw] p-4">
-            <img
-              src={logoLight}
-              alt="React Router"
-              className="block w-full dark:hidden"
-            />
-            <img
-              src={logoDark}
-              alt="React Router"
-              className="hidden w-full dark:block"
-            />
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 bg-background text-foreground relative overflow-hidden">
+      {/* Background Grid Pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, var(--accents-2) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--accents-2) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+          maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)',
+          opacity: 0.2
+        }}
+      />
+
+      <main className="max-w-5xl w-full z-10 flex flex-col gap-16">
+        {/* Hero Section */}
+        <section className="flex flex-col items-center text-center gap-6 animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accents-2 bg-accents-1 text-xs font-medium text-accents-5 mb-4">
+            <span className="w-2 h-2 rounded-full bg-vercel-blue animate-pulse"></span>
+            <span>Vercel Style V4 Design System</span>
           </div>
-        </header>
-        <div className="max-w-[300px] w-full space-y-6 px-4">
-          <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-              What&apos;s next?
-            </p>
-            <ul>
-              {resources.map(({ href, text, icon }) => (
-                <li key={href}>
-                  <a
-                    className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {icon}
-                    {text}
-                  </a>
-                </li>
-              ))}
-              <li className="self-stretch p-3 leading-normal">{message}</li>
-            </ul>
-          </nav>
+
+          <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight leading-[1.1]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-br from-foreground to-accents-4">
+              Develop. Preview. Ship.
+            </span>
+          </h1>
+
+          <p className="text-lg sm:text-xl text-accents-5 max-w-2xl text-center leading-relaxed">
+            The platform for frontend developers, providing the speed and reliability you need to build at the speed of your creativity.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto">
+            <button className="h-12 px-8 rounded-md bg-foreground text-background font-medium text-base hover:bg-accents-7 transition-colors duration-200">
+              Start Deploying
+            </button>
+            <button className="h-12 px-8 rounded-md border border-accents-2 bg-background text-foreground font-medium text-base hover:border-foreground hover:text-foreground transition-all duration-200">
+              Get a Demo
+            </button>
+          </div>
+        </section>
+
+        {/* Feature Grid */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+          <Card
+            title="Global Edge Network"
+            description="Deploy your content to our global edge network for the fastest delivery speeds."
+            icon={<GlobeIcon />}
+          />
+          <Card
+            title="Serverless Functions"
+            description="Run server-side code without managing servers. Scale automatically with traffic."
+            icon={<LightningIcon />}
+          />
+          <Card
+            title="Frontend Frameworks"
+            description="First-class support for Next.js, React, Vue, Svelte, and more."
+            icon={<CodeIcon />}
+          />
+          <Card
+            title="Collaborative Previews"
+            description="Every deploy gets a unique URL. Share with your team for instant feedback."
+            icon={<EyeIcon />}
+          />
+          <Card
+            title="Analytics"
+            description="Real-time insights into your application's performance and usage."
+            icon={<ChartIcon />}
+          />
+          <Card
+            title="Security"
+            description="Enterprise-grade security features to keep your data and users safe."
+            icon={<LockIcon />}
+          />
+        </section>
+      </main>
+
+      <footer className="w-full max-w-5xl mt-24 border-t border-accents-2 pt-8 flex flex-col md:flex-row justify-between items-center text-accents-5 text-sm">
+        <p>© 2025 ABANDON INC. All rights reserved.</p>
+        <div className="flex gap-4 mt-4 md:mt-0">
+          <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
+          <a href="#" className="hover:text-foreground transition-colors">Terms</a>
+          <a href="#" className="hover:text-foreground transition-colors">Status</a>
         </div>
-      </div>
-    </main>
+      </footer>
+    </div>
   );
 }
 
-const resources = [
-  {
-    href: "https://reactrouter.com/docs",
-    text: "React Router Docs",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M9.99981 10.0751V9.99992M17.4688 17.4688C15.889 19.0485 11.2645 16.9853 7.13958 12.8604C3.01467 8.73546 0.951405 4.11091 2.53116 2.53116C4.11091 0.951405 8.73546 3.01467 12.8604 7.13958C16.9853 11.2645 19.0485 15.889 17.4688 17.4688ZM2.53132 17.4688C0.951566 15.8891 3.01483 11.2645 7.13974 7.13963C11.2647 3.01471 15.8892 0.951453 17.469 2.53121C19.0487 4.11096 16.9854 8.73551 12.8605 12.8604C8.73562 16.9853 4.11107 19.0486 2.53132 17.4688Z"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: "https://rmx.as/discord",
-    text: "Join Discord",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 24 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M15.0686 1.25995L14.5477 1.17423L14.2913 1.63578C14.1754 1.84439 14.0545 2.08275 13.9422 2.31963C12.6461 2.16488 11.3406 2.16505 10.0445 2.32014C9.92822 2.08178 9.80478 1.84975 9.67412 1.62413L9.41449 1.17584L8.90333 1.25995C7.33547 1.51794 5.80717 1.99419 4.37748 2.66939L4.19 2.75793L4.07461 2.93019C1.23864 7.16437 0.46302 11.3053 0.838165 15.3924L0.868838 15.7266L1.13844 15.9264C2.81818 17.1714 4.68053 18.1233 6.68582 18.719L7.18892 18.8684L7.50166 18.4469C7.96179 17.8268 8.36504 17.1824 8.709 16.4944L8.71099 16.4904C10.8645 17.0471 13.128 17.0485 15.2821 16.4947C15.6261 17.1826 16.0293 17.8269 16.4892 18.4469L16.805 18.8725L17.3116 18.717C19.3056 18.105 21.1876 17.1751 22.8559 15.9238L23.1224 15.724L23.1528 15.3923C23.5873 10.6524 22.3579 6.53306 19.8947 2.90714L19.7759 2.73227L19.5833 2.64518C18.1437 1.99439 16.6386 1.51826 15.0686 1.25995ZM16.6074 10.7755L16.6074 10.7756C16.5934 11.6409 16.0212 12.1444 15.4783 12.1444C14.9297 12.1444 14.3493 11.6173 14.3493 10.7877C14.3493 9.94885 14.9378 9.41192 15.4783 9.41192C16.0471 9.41192 16.6209 9.93851 16.6074 10.7755ZM8.49373 12.1444C7.94513 12.1444 7.36471 11.6173 7.36471 10.7877C7.36471 9.94885 7.95323 9.41192 8.49373 9.41192C9.06038 9.41192 9.63892 9.93712 9.6417 10.7815C9.62517 11.6239 9.05462 12.1444 8.49373 12.1444Z"
-          strokeWidth="1.5"
-        />
-      </svg>
-    ),
-  },
-];
+function Card({ title, description, icon }: { title: string, description: string, icon: React.ReactNode }) {
+  return (
+    <div className="group p-6 rounded-lg border border-accents-2 bg-background hover:border-foreground transition-colors duration-300 flex flex-col gap-3">
+      <div className="w-10 h-10 rounded-full bg-accents-1 flex items-center justify-center border border-accents-2 group-hover:bg-foreground group-hover:text-background transition-colors duration-300">
+        {icon}
+      </div>
+      <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+      <p className="text-accents-5 text-sm leading-relaxed">{description}</p>
+    </div>
+  );
+}
+
+// Icons
+function GlobeIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+  )
+}
+
+function LightningIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+  )
+}
+
+function CodeIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+  )
+}
+
+function EyeIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+  )
+}
+
+function ChartIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+  )
+}
+
+function LockIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+  )
+}
