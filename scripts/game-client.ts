@@ -49,7 +49,7 @@ function findValidNonce(
     targetDifficulty: number
 ): PoWResult {
     const startTime = Date.now();
-    let timestamp = Date.now();
+    let timestamp = Math.floor(Date.now() / 1000); // Unix seconds
     let nonce = 0;
     const targetPrefix = '0'.repeat(targetDifficulty);
 
@@ -172,7 +172,7 @@ async function main() {
             // Show curl command
             console.log('\n' + colors.bold('Run this command to submit:'));
             console.log(`
-curl -X POST http://localhost:1999/party/virus \\
+curl -X POST https://www-abandon-ai-party.tunogya.partykit.dev/party/virus \\
   -H "Content-Type: application/json" \\
   -d '{
     "address": "${result.address}",
@@ -219,7 +219,7 @@ curl -X POST http://localhost:1999/party/virus \\
             // Show curl command
             console.log('\n' + colors.bold('Run this command to submit:'));
             console.log(`
-curl -X POST http://localhost:1999/party/vaccine \\
+curl -X POST https://www-abandon-ai-party.tunogya.partykit.dev/party/vaccine \\
   -H "Content-Type: application/json" \\
   -d '{
     "address": "${result.address}",

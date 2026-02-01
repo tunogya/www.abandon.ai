@@ -15,11 +15,6 @@ import {
   ErrorResponse,
 } from "./types";
 import { validateVirusHash, validateVaccineHash } from "./hash";
-import {
-  verifyVirusSignature,
-  verifyVaccineSignature,
-  isTimestampValid,
-} from "./signature";
 
 export default class Server implements Party.Server {
   // In-memory game state
@@ -107,26 +102,7 @@ export default class Server implements Party.Server {
   async handleCreateVirus(
     body: CreateVirusRequest
   ): Promise<VirusResponse | ErrorResponse> {
-    const { address, signature, timestamp, nonce, difficulty, memo = "" } = body;
-
-    // Validate timestamp
-    if (!isTimestampValid(timestamp)) {
-      return { success: false, error: "Timestamp out of acceptable range (must be within 1 hour)" };
-    }
-
-    // Verify signature
-    const signatureValid = await verifyVirusSignature(
-      address,
-      timestamp,
-      nonce,
-      difficulty,
-      memo,
-      signature
-    );
-
-    if (!signatureValid) {
-      return { success: false, error: "Invalid signature" };
-    }
+    const { address, timestamp, nonce, difficulty, memo = "" } = body;
 
     // Validate PoW
     const validation = await validateVirusHash(
@@ -146,7 +122,7 @@ export default class Server implements Party.Server {
       id: this.generateId(),
       hash: validation.hash!,
       createdBy: address,
-      createdAt: Date.now(),
+      createdAt: Math.floor(Date.now() / 1000),
       timestamp,
       nonce,
       difficulty,
@@ -178,12 +154,7 @@ export default class Server implements Party.Server {
   async handleCreateVaccine(
     body: CreateVaccineRequest
   ): Promise<VaccineResponse | ErrorResponse> {
-    const { address, signature, target, timestamp, nonce } = body;
-
-    // Validate timestamp
-    if (!isTimestampValid(timestamp)) {
-      return { success: false, error: "Timestamp out of acceptable range (must be within 1 hour)" };
-    }
+    const { address, target, timestamp, nonce } = body;
 
     // Check if target virus exists
     const targetVirus = this.viruses.get(target);
@@ -193,19 +164,6 @@ export default class Server implements Party.Server {
 
     if (targetVirus.status === "eliminated") {
       return { success: false, error: "Target virus already eliminated" };
-    }
-
-    // Verify signature
-    const signatureValid = await verifyVaccineSignature(
-      address,
-      target,
-      timestamp,
-      nonce,
-      signature
-    );
-
-    if (!signatureValid) {
-      return { success: false, error: "Invalid signature" };
     }
 
     // Validate PoW (must match target virus difficulty)
@@ -226,7 +184,7 @@ export default class Server implements Party.Server {
       id: this.generateId(),
       hash: validation.hash!,
       createdBy: address,
-      createdAt: Date.now(),
+      createdAt: Math.floor(Date.now() / 1000),
       target,
       timestamp,
       nonce,
@@ -240,7 +198,7 @@ export default class Server implements Party.Server {
     // Eliminate virus
     targetVirus.status = "eliminated";
     targetVirus.eliminatedBy = address;
-    targetVirus.eliminatedAt = Date.now();
+    targetVirus.eliminatedAt = Math.floor(Date.now() / 1000);
 
     this.stats.totalVaccinesCreated++;
     this.stats.successfulVaccines++;
@@ -338,7 +296,7 @@ export default class Server implements Party.Server {
   }
 
   private generateId(): string {
-    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
   }
 }
 

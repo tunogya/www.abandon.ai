@@ -110,37 +110,29 @@ npm run start
 
 All endpoints are handled in `party/index.ts` via `onRequest()`:
 
-### Authentication
-All virus/vaccine creation requests require **Ethereum signature verification** (EIP-191 personal_sign):
-- Requests must include `address` and `signature` fields
-- Returns `401 Unauthorized` if signature verification fails
-- Timestamps must be within 1 hour (prevents replay attacks)
-
 ### Endpoints
 
 ```
 POST /party/virus
   Body: {
     "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-    "signature": "0x...",
     "timestamp": 1738454400,
     "nonce": 12345,
     "difficulty": 5,
-    "memo": "0x1234" // optional hex string
+    "memo": "" // optional hex string
   }
   Returns: { "success": true, "virus": {...}, "stats": {...} }
-  Errors: 400 (validation), 401 (signature failed)
+  Errors: 400 (validation failed)
 
 POST /party/vaccine
   Body: {
     "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-    "signature": "0x...",
-    "target": "0x...",
+    "target": "00000abc123...",
     "timestamp": 1738454400,
     "nonce": 12345
   }
   Returns: { "success": true, "vaccine": {...}, "virus": {...}, "stats": {...} }
-  Errors: 400 (validation), 401 (signature failed), 404 (virus not found)
+  Errors: 400 (validation failed), 404 (virus not found)
 
 GET /party/status
   Returns: { "activeViruses": [...], "stats": {...} }
@@ -149,40 +141,29 @@ GET /party/history?limit=100
   Returns: { "viruses": [...], "vaccines": [...] }
 ```
 
-### Signature Generation Example (for AI Agents)
+### Example Request (for AI Agents)
 
-```typescript
-import { generateSignMessage } from './party/signature';
-import { Wallet } from 'viem/accounts';
+```bash
+# Create a virus
+curl -X POST https://www-abandon-ai-party.tunogya.partykit.dev/party/virus \
+  -H "Content-Type: application/json" \
+  -d '{
+    "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+    "timestamp": 1738454400,
+    "nonce": 12345,
+    "difficulty": 5,
+    "memo": ""
+  }'
 
-// Create virus request
-const wallet = privateKeyToAccount('0x...');
-const params = {
-  address: wallet.address,
-  timestamp: Math.floor(Date.now() / 1000),
-  nonce: 12345,
-  difficulty: 5,
-  memo: "0x1234" // optional
-};
-
-// Generate the message to sign
-const message = generateSignMessage(
-  'create_virus',
-  params.address,
-  params.timestamp,
-  params.nonce,
-  { difficulty: params.difficulty, memo: params.memo }
-);
-
-// Sign the message (using viem)
-const signature = await wallet.signMessage({ message });
-
-// Send request
-await fetch('https://www.abandon.ai/party/virus', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ ...params, signature })
-});
+# Create a vaccine
+curl -X POST https://www-abandon-ai-party.tunogya.partykit.dev/party/vaccine \
+  -H "Content-Type: application/json" \
+  -d '{
+    "address": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+    "target": "00000abc123...",
+    "timestamp": 1738454400,
+    "nonce": 12345
+  }'
 ```
 
 ## Type System
@@ -217,6 +198,7 @@ The `useGameState()` hook in `app/hooks/useGameState.ts`:
 
 - **No persistence:** Game state is in-memory only. Server restart = data loss.
 - **Single room:** All clients connect to the same "main" room.
-- **No authentication:** API endpoints are open to any address.
+- **No authentication:** API endpoints use Proof-of-Work validation only.
 - **Localhost detection:** Frontend switches PartyKit host based on `window.location.hostname`.
 - **SSR enabled:** React Router runs in SSR mode by default (see `react-router.config.ts`).
+- **Timestamps:** All timestamps use Unix seconds (not milliseconds).

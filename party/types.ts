@@ -97,7 +97,6 @@ export type ServerMessage =
 // HTTP API request/response types
 export interface CreateVirusRequest {
   address: string;
-  signature: string;
   timestamp: number;
   nonce: number;
   difficulty: number;
@@ -106,7 +105,6 @@ export interface CreateVirusRequest {
 
 export interface CreateVaccineRequest {
   address: string;
-  signature: string;
   target: string;
   timestamp: number;
   nonce: number;
