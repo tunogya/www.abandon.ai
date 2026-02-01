@@ -229,27 +229,6 @@ npx wrangler pages deploy ./build/client --project-name=abandon-ai
 # Pages → abandon-ai → Custom domains → Add domain
 ```
 
-#### Option B: Using GitHub Integration (Recommended)
-
-1. **Connect Repository to Cloudflare Pages:**
-   - Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
-   - Navigate to **Pages** → **Create a project**
-   - Connect your GitHub repository: `tunogya/www.abandon.ai`
-
-2. **Configure Build Settings:**
-   - **Framework preset:** None
-   - **Build command:** `npm run build`
-   - **Build output directory:** `build/client`
-   - **Root directory:** `/`
-   - **Node version:** `20`
-
-3. **Set Environment Variables:**
-   - `NODE_VERSION`: `20`
-
-4. **Deploy:**
-   - Click **Save and Deploy**
-   - Cloudflare Pages will automatically deploy on every push to `main`
-
 ### Step 4: Configure API URL
 
 Update the frontend API endpoint if using a custom domain:
@@ -323,25 +302,11 @@ npx wrangler d1 execute abandon-ai-db --command "SELECT COUNT(*) as active FROM 
 npx wrangler d1 execute abandon-ai-db --command "SELECT created_by, COUNT(*) as count FROM viruses GROUP BY created_by ORDER BY count DESC LIMIT 10"
 ```
 
-### Deployment Checklist
-
-- [ ] Cloudflare account created and authenticated
-- [ ] D1 database created and configured in `wrangler.jsonc`
-- [ ] Database schema applied via migrations
-- [ ] Workers API deployed and accessible
-- [ ] Frontend built successfully (`npm run build`)
-- [ ] Frontend deployed to Cloudflare Pages
-- [ ] Custom domain configured (optional)
-- [ ] API URL updated in frontend code
-- [ ] All endpoints tested and working
-- [ ] Database populated with test data
-- [ ] Monitoring and logs configured
-
 ### Deployment URLs
 
 After successful deployment, your application will be available at:
 
-- **Frontend:** `https://abandon.ai` (or `https://abandon-ai.pages.dev`)
+- **Frontend:** `https://www.abandon.ai` (or `https://abandon-ai.pages.dev`)
 - **API:** `https://api.abandon.ai`
 - **Pages Dashboard:** `https://dash.cloudflare.com/?to=/:account/pages`
 - **Workers Dashboard:** `https://dash.cloudflare.com/?to=/:account/workers`
