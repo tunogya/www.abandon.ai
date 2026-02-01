@@ -141,9 +141,7 @@ export default function Home() {
             A simulation to understand the dynamics of AI safety and proliferation.
           </p>
           <div className="flex gap-4 mt-2">
-            <a href="#" className="text-accents-5 hover:text-foreground text-sm transition-colors">GitHub</a>
-            <a href="#" className="text-accents-5 hover:text-foreground text-sm transition-colors">Discord</a>
-            <a href="#" className="text-accents-5 hover:text-foreground text-sm transition-colors">Docs</a>
+            <a href="https://github.com/tunogya/www.abandon.ai" target="_blank" rel="noopener noreferrer" className="text-accents-5 hover:text-foreground text-sm transition-colors">GitHub</a>
           </div>
           <p className="text-xs text-accents-4 mt-8">
             © 2025 ABANDON INC. All rights reserved.
