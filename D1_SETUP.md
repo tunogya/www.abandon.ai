@@ -47,19 +47,20 @@ For local development (optional):
 npx wrangler d1 execute abandon-ai-db --local --file=./migrations/0001_init.sql
 ```
 
-### 3. Update PartyKit Configuration
+### 3. Configure D1 Binding in PartyKit Dashboard
 
-The `partykit.json` file has already been configured with:
+PartyKit D1 bindings are configured through the PartyKit dashboard, not in `partykit.json`.
 
-```json
-{
-  "d1_databases": {
-    "DB": "abandon-ai-db"
-  }
-}
-```
+**Option A: Configure via Dashboard (Recommended)**
+1. Go to https://www.partykit.io/dashboard
+2. Select your project `www-abandon-ai-party`
+3. Navigate to Settings → Environment Variables
+4. Add D1 database binding:
+   - Binding name: `DB`
+   - Database: Select `abandon-ai-db` from dropdown
 
-The binding name `"DB"` must match the database_id from step 1 in your `wrangler.toml` or PartyKit deployment settings.
+**Option B: Configure via CLI on first deploy**
+When you run `npx partykit deploy`, PartyKit will detect the D1 database in your Cloudflare account and prompt you to bind it.
 
 ### 4. Deploy to Production
 
