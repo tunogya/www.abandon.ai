@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { Virus, GameStats, StatusResponse } from '../../shared/types';
+import { API_ENDPOINTS } from '../config/api';
 
 interface GameState {
   activeViruses: Virus[];
@@ -8,10 +9,6 @@ interface GameState {
   error: string | null;
   lastUpdated: number | null;
 }
-
-const API_BASE = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-  ? 'http://localhost:8787'
-  : 'https://api.abandon.ai';
 
 export function useGameStateRest() {
   const [gameState, setGameState] = useState<GameState>({
@@ -32,7 +29,7 @@ export function useGameStateRest() {
 
   const fetchStatus = useCallback(async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/status`);
+      const response = await fetch(API_ENDPOINTS.STATUS);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);

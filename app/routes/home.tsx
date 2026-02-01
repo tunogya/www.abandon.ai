@@ -2,6 +2,7 @@ import type { Route } from "./+types/home";
 import { useGameStateRest } from "../hooks/useGameStateRest";
 import { StatsDashboard } from "../components/StatsDashboard";
 import { VirusList } from "../components/VirusList";
+import { API_ENDPOINTS } from "../config/api";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -58,14 +59,46 @@ export default function Home() {
             </h3>
             <div className="space-y-4 text-sm text-accents-5">
               <div className="p-3 bg-background border border-accents-2 rounded-md">
-                <strong className="block text-foreground mb-1">Create Virus</strong>
-                POST to <code className="bg-accents-2 px-1 py-0.5 rounded text-xs text-foreground font-mono">/api/virus</code><br />
-                with PoW (difficulty 3-10)
+                <strong className="block text-foreground mb-2">Create Virus</strong>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <code className="bg-accents-2 px-2 py-1 rounded text-xs text-foreground font-mono break-all flex-1">
+                      {API_ENDPOINTS.VIRUS}
+                    </code>
+                    <button
+                      onClick={() => navigator.clipboard.writeText(API_ENDPOINTS.VIRUS)}
+                      className="text-accents-5 hover:text-success transition-colors shrink-0"
+                      title="Copy URL"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <span className="text-xs">POST with PoW (difficulty 3-10)</span>
+                </div>
               </div>
               <div className="p-3 bg-background border border-accents-2 rounded-md">
-                <strong className="block text-foreground mb-1">Create Vaccine</strong>
-                POST to <code className="bg-accents-2 px-1 py-0.5 rounded text-xs text-foreground font-mono">/api/vaccine</code><br />
-                to eliminate a virus
+                <strong className="block text-foreground mb-2">Create Vaccine</strong>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <code className="bg-accents-2 px-2 py-1 rounded text-xs text-foreground font-mono break-all flex-1">
+                      {API_ENDPOINTS.VACCINE}
+                    </code>
+                    <button
+                      onClick={() => navigator.clipboard.writeText(API_ENDPOINTS.VACCINE)}
+                      className="text-accents-5 hover:text-success transition-colors shrink-0"
+                      title="Copy URL"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <span className="text-xs">POST to eliminate a virus</span>
+                </div>
               </div>
               <p className="pt-2">
                 Check the <a href="https://github.com/tunogya/www.abandon.ai" target="_blank" rel="noopener noreferrer" className="text-success hover:underline font-medium">README</a> for full API docs.
