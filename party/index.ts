@@ -16,24 +16,108 @@ import {
 } from "./types";
 import { validateVirusHash, validateVaccineHash } from "./hash";
 
+// D1 Database interface
+interface Env {
+  DB?: D1Database;
+}
+
 export default class Server implements Party.Server {
-  // In-memory game state
+  // In-memory game state (for fast reads)
   private viruses: Map<string, Virus> = new Map();
   private vaccines: Vaccine[] = [];
   private stats: GameStats = {
     totalVirusesCreated: 0,
     activeViruses: 0,
     eliminatedViruses: 0,
-    totalVaccinesCreated: 0,
-    successfulVaccines: 0,
-    failedVaccines: 0,
     uniqueAddresses: 0,
   };
   private uniqueAddresses: Set<string> = new Set();
+  private initialized = false;
+  private db: D1Database | undefined;
 
-  constructor(readonly room: Party.Room) { }
+  constructor(readonly room: Party.Room) {
+    this.db = (room.env as Env).DB;
+  }
+
+  // Load state from D1 on first use
+  private async ensureInitialized() {
+    if (this.initialized) return;
+    this.initialized = true;
+
+    if (!this.db) {
+      console.warn("D1 database not available (local dev mode)");
+      return;
+    }
+
+    try {
+      // Load all viruses
+      const virusRows = await this.db
+        .prepare("SELECT * FROM viruses ORDER BY created_at DESC")
+        .all();
+
+      if (virusRows.results) {
+        for (const row of virusRows.results) {
+          const virus: Virus = {
+            id: row.id as string,
+            hash: row.hash as string,
+            createdBy: row.created_by as string,
+            createdAt: row.created_at as number,
+            timestamp: row.timestamp as number,
+            nonce: row.nonce as number,
+            difficulty: row.difficulty as number,
+            memo: row.memo as string | undefined,
+            status: row.status as "active" | "eliminated",
+            eliminatedBy: row.eliminated_by as string | undefined,
+            eliminatedAt: row.eliminated_at as number | undefined,
+          };
+          this.viruses.set(virus.hash, virus);
+          this.uniqueAddresses.add(virus.createdBy);
+          if (virus.eliminatedBy) {
+            this.uniqueAddresses.add(virus.eliminatedBy);
+          }
+        }
+      }
+
+      // Load all vaccines (keep in memory for history)
+      const vaccineRows = await this.db
+        .prepare("SELECT * FROM vaccines ORDER BY created_at DESC LIMIT 1000")
+        .all();
+
+      if (vaccineRows.results) {
+        for (const row of vaccineRows.results) {
+          const vaccine: Vaccine = {
+            id: row.id as string,
+            hash: row.hash as string,
+            createdBy: row.created_by as string,
+            createdAt: row.created_at as number,
+            target: row.target as string,
+            timestamp: row.timestamp as number,
+            nonce: row.nonce as number,
+            success: row.success === 1,
+            virusId: row.virus_id as string | undefined,
+          };
+          this.vaccines.push(vaccine);
+          this.uniqueAddresses.add(vaccine.createdBy);
+        }
+      }
+
+      // Calculate stats
+      this.stats.totalVirusesCreated = this.viruses.size;
+      this.stats.activeViruses = Array.from(this.viruses.values()).filter(
+        (v) => v.status === "active"
+      ).length;
+      this.stats.eliminatedViruses = this.stats.totalVirusesCreated - this.stats.activeViruses;
+      this.stats.uniqueAddresses = this.uniqueAddresses.size;
+
+      console.log(`Loaded ${this.viruses.size} viruses and ${this.vaccines.length} vaccines from D1`);
+    } catch (error) {
+      console.error("Error loading from D1:", error);
+    }
+  }
 
   async onRequest(req: Party.Request): Promise<Response> {
+    await this.ensureInitialized();
+
     const url = new URL(req.url);
     const path = url.pathname;
 
@@ -130,6 +214,31 @@ export default class Server implements Party.Server {
       status: "active",
     };
 
+    // Persist to D1 if available
+    if (this.db) {
+      try {
+        await this.db
+          .prepare(
+            `INSERT INTO viruses (id, hash, created_by, created_at, timestamp, nonce, difficulty, memo, status)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          )
+          .bind(
+            virus.id,
+            virus.hash,
+            virus.createdBy,
+            virus.createdAt,
+            virus.timestamp,
+            virus.nonce,
+            virus.difficulty,
+            virus.memo || null,
+            virus.status
+          )
+          .run();
+      } catch (error) {
+        console.error("Error persisting virus to D1:", error);
+      }
+    }
+
     this.viruses.set(virus.hash, virus);
     this.uniqueAddresses.add(address);
     this.stats.totalVirusesCreated++;
@@ -200,11 +309,50 @@ export default class Server implements Party.Server {
     targetVirus.eliminatedBy = address;
     targetVirus.eliminatedAt = Math.floor(Date.now() / 1000);
 
-    this.stats.totalVaccinesCreated++;
-    this.stats.successfulVaccines++;
     this.stats.activeViruses--;
     this.stats.eliminatedViruses++;
     this.stats.uniqueAddresses = this.uniqueAddresses.size;
+
+    // Persist to D1 if available
+    if (this.db) {
+      try {
+        // Insert vaccine
+        await this.db
+          .prepare(
+            `INSERT INTO vaccines (id, hash, created_by, created_at, target, timestamp, nonce, success, virus_id)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          )
+          .bind(
+            vaccine.id,
+            vaccine.hash,
+            vaccine.createdBy,
+            vaccine.createdAt,
+            vaccine.target,
+            vaccine.timestamp,
+            vaccine.nonce,
+            vaccine.success ? 1 : 0,
+            vaccine.virusId || null
+          )
+          .run();
+
+        // Update virus status
+        await this.db
+          .prepare(
+            `UPDATE viruses
+             SET status = ?, eliminated_by = ?, eliminated_at = ?
+             WHERE hash = ?`
+          )
+          .bind(
+            targetVirus.status,
+            targetVirus.eliminatedBy,
+            targetVirus.eliminatedAt,
+            targetVirus.hash
+          )
+          .run();
+      } catch (error) {
+        console.error("Error persisting vaccine to D1:", error);
+      }
+    }
 
     // Broadcast to all connected clients
     const message: ServerMessage = {
@@ -248,7 +396,8 @@ export default class Server implements Party.Server {
     };
   }
 
-  onConnect(conn: Party.Connection) {
+  async onConnect(conn: Party.Connection) {
+    await this.ensureInitialized();
     console.log(`Connected: ${conn.id}`);
 
     // Send current status to new connection

@@ -12,7 +12,14 @@
 	},
 	"observability": {
 		"enabled": true
-	}
+	},
+	"d1_databases": [
+		{
+			"binding": "abandon_ai_db",
+			"database_name": "abandon-ai-db",
+			"database_id": "426355b2-ae29-4438-96f3-03a879abd5f8"
+		}
+	]
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement

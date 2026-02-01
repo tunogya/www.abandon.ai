@@ -2,5 +2,8 @@
   "$schema": "https://www.partykit.io/schema.json",
   "name": "www-abandon-ai-party",
   "main": "party/index.ts",
-  "compatibilityDate": "2026-02-01"
+  "compatibilityDate": "2026-02-01",
+  "d1_databases": {
+    "DB": "abandon-ai-db"
+  }
 }

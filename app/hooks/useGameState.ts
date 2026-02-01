@@ -13,9 +13,6 @@ const initialStats: GameStats = {
   totalVirusesCreated: 0,
   activeViruses: 0,
   eliminatedViruses: 0,
-  totalVaccinesCreated: 0,
-  successfulVaccines: 0,
-  failedVaccines: 0,
   uniqueAddresses: 0,
 };
 

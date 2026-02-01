@@ -30,9 +30,6 @@ export interface GameStats {
   totalVirusesCreated: number;
   activeViruses: number;
   eliminatedViruses: number;
-  totalVaccinesCreated: number;
-  successfulVaccines: number;
-  failedVaccines: number;
   uniqueAddresses: number;
 }
 
