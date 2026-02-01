@@ -7,6 +7,9 @@
 		"dev:api": "wrangler dev",
 		"build:frontend": "react-router build",
 		"preview": "npm run build:frontend && vite preview",
+		"test": "vitest",
+		"test:ui": "vitest --ui",
+		"test:coverage": "vitest --coverage",
 		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
 		"deploy:frontend": "npm run build:frontend && wrangler pages deploy ./build/client",
 		"deploy:api": "wrangler deploy",
@@ -24,6 +27,7 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.13.5",
+		"@cloudflare/vitest-pool-workers": "^0.12.8",
 		"@react-router/dev": "^7.10.0",
 		"@tailwindcss/vite": "^4.1.13",
 		"@types/node": "^22",
@@ -33,6 +37,7 @@
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7",
 		"vite-tsconfig-paths": "^5.1.4",
+		"vitest": "^3.2.4",
 		"wrangler": "^4.61.1"
 	}
 }
