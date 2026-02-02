@@ -1,85 +1,37 @@
 @import "tailwindcss" source(".");
 
 :root {
-  /* Light Mode (Vercel-like) */
+  /* Hacker News Light Mode */
   --background: #ffffff;
+  --background-content: #F6F6EF;
   --foreground: #000000;
+  /* Light gray text like HN dark mode or equivalent readability */
+  --primary: #ff6600;
+  /* HN Orange */
 
+  /* Light Mode Accents */
   --accents-1: #fafafa;
   --accents-2: #eaeaea;
   --accents-3: #999999;
   --accents-4: #888888;
   --accents-5: #666666;
   --accents-6: #444444;
-  --accents-7: #333333;
-  --accents-8: #111111;
+  --accents-7: #222222;
+  --accents-8: #000000;
 
-  --success: #0070f3;
-  --success-lighter: #d3e5ff;
-  --success-light: #3291ff;
-  --success-dark: #0761d1;
+  --success: #5c9c5c;
+  --error: #dd5555;
+  --warning: #cc9933;
 
-  --error: #e00;
-  --error-light: #ff1a1a;
-  --error-dark: #c50000;
-
-  --warning: #f5a623;
-  --warning-light: #f7b955;
-  --warning-dark: #ab570a;
-
-  --violet: #7928ca;
-  --violet-light: #8a63d2;
-  --violet-dark: #4c2889;
-
-  --cyan: #50e3c2;
-  --cyan-light: #79ffe1;
-  --cyan-dark: #29bc9b;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Dark Mode (Vercel-like) */
-    --background: #000000;
-    --foreground: #ffffff;
-
-    --accents-1: #111111;
-    --accents-2: #333333;
-    --accents-3: #444444;
-    --accents-4: #666666;
-    --accents-5: #888888;
-    --accents-6: #999999;
-    --accents-7: #eaeaea;
-    --accents-8: #fafafa;
-
-    --success: #0070f3;
-    --success-lighter: #d3e5ff;
-    --success-light: #3291ff;
-    --success-dark: #0761d1;
-
-    --error: #e00;
-    --error-light: #ff1a1a;
-    --error-dark: #c50000;
-
-    --warning: #f5a623;
-    --warning-light: #f7b955;
-    --warning-dark: #ab570a;
-
-    --violet: #7928ca;
-    --violet-light: #8a63d2;
-    --violet-dark: #4c2889;
-
-    --cyan: #50e3c2;
-    --cyan-light: #79ffe1;
-    --cyan-dark: #29bc9b;
-  }
+  --font-hn: Verdana, Geneva, sans-serif;
 }
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: "Verdana", Geneva, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
 
   --color-accents-1: var(--accents-1);
   --color-accents-2: var(--accents-2);
@@ -91,34 +43,43 @@
   --color-accents-8: var(--accents-8);
 
   --color-success: var(--success);
-  --color-success-light: var(--success-light);
-  --color-success-dark: var(--success-dark);
-
   --color-error: var(--error);
-  --color-error-light: var(--error-light);
-  --color-error-dark: var(--error-dark);
-
   --color-warning: var(--warning);
-  --color-warning-light: var(--warning-light);
-  --color-warning-dark: var(--warning-dark);
 
-  --color-vercel-blue: var(--success);
-  --color-vercel-cyan: var(--cyan);
-  --color-vercel-violet: var(--violet);
-  --color-vercel-warning: var(--warning);
-  --color-vercel-error: var(--error);
+  --color-background-content: var(--background-content);
 }
 
 html,
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-hn);
+  font-size: 10pt;
+  /* HN standard size */
+  line-height: normal;
+  /* Compact */
+  -webkit-font-smoothing: auto;
+  /* Turn off antialiasing for crisp pixely look if preferred, or keep antialiased */
+  -moz-osx-font-smoothing: auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* HN Specific input styles */
+input,
+textarea,
+button {
+  font-family: var(--font-hn);
+  font-size: 10pt;
 }
 
 ::selection {
-  background-color: var(--success);
+  background-color: var(--primary);
   color: white;
 }

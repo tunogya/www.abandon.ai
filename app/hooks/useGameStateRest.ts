@@ -24,7 +24,7 @@ export function useGameStateRest() {
     lastUpdated: null,
   });
 
-  const intervalRef = useRef<number>();
+  const intervalRef = useRef<number>(undefined);
   const isVisibleRef = useRef<boolean>(true);
 
   const fetchStatus = useCallback(async () => {
