@@ -41,7 +41,7 @@ function VirusItem({ virus, index }: { virus: Virus, index: number }) {
 
       {/* Meta Line */}
       <div className="text-[7pt] text-accents-4 ml-6 leading-tight">
-        created by {virus.createdBy} | {timeAgo} | {memoText ? `| ${memoText}` : ''}
+        created by {virus.createdBy} | {timeAgo} {memoText ? `| ${memoText}` : ''}
       </div>
     </li>
   );
