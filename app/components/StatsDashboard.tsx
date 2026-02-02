@@ -3,9 +3,35 @@ import type { GameStats } from '../types';
 interface StatsDashboardProps {
   stats: GameStats;
   loading: boolean;
+  variant?: 'default' | 'navbar';
 }
 
-export function StatsDashboard({ stats, loading }: StatsDashboardProps) {
+export function StatsDashboard({ stats, loading, variant = 'default' }: StatsDashboardProps) {
+  if (variant === 'navbar') {
+    return (
+      <div className="flex items-center gap-3 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth">
+        <div className="flex items-center gap-1.5 shrink-0">
+          <div
+            className={`w-1.5 h-1.5 rounded-full animate-pulse ${!loading ? 'bg-success' : 'bg-warning'
+              }`}
+          />
+          <span className="text-[10px] font-medium text-accents-5 uppercase tracking-wider hidden sm:block">
+            {loading ? 'SYNCING' : 'LIVE'}
+          </span>
+        </div>
+
+        <div className="h-3 w-px bg-accents-2 shrink-0 hidden sm:block"></div>
+
+        <div className="flex items-center gap-4 sm:gap-6">
+          <CompactStat label="ACTIVE" value={stats.activeViruses} color="text-error" />
+          <CompactStat label="TOTAL" value={stats.totalVirusesCreated} />
+          <CompactStat label="CURED" value={stats.eliminatedViruses} color="text-success" />
+          <CompactStat label="AGENTS" value={stats.uniqueAddresses} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-6">
@@ -43,6 +69,21 @@ export function StatsDashboard({ stats, loading }: StatsDashboardProps) {
           icon="🤖"
         />
       </div>
+    </div>
+  );
+}
+
+interface CompactStatProps {
+  label: string;
+  value: number;
+  color?: string;
+}
+
+function CompactStat({ label, value, color = "text-foreground" }: CompactStatProps) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-2 shrink-0">
+      <span className="text-[10px] text-accents-5 uppercase font-medium tracking-widest">{label}</span>
+      <span className={`text-xs font-mono font-bold tracking-tight ${color}`}>{value}</span>
     </div>
   );
 }

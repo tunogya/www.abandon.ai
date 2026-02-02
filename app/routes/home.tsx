@@ -18,18 +18,20 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-success selection:text-white">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-accents-2">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4 shrink-0">
             <img src="/a.png" alt="abandon.ai" className="w-8 h-8 rounded object-contain" />
             <div>
-              <h1 className="text-lg font-bold tracking-tight">abandon.ai</h1>
+              <h1 className="text-lg font-bold tracking-tight hidden sm:block">abandon.ai</h1>
+              <h1 className="text-lg font-bold tracking-tight sm:hidden">AI</h1>
             </div>
-            <div className="hidden sm:block h-6 w-px bg-accents-2 mx-2"></div>
-            <p className="hidden sm:block text-sm text-accents-5">
+            <div className="hidden md:block h-6 w-px bg-accents-2 mx-2"></div>
+            <p className="hidden md:block text-sm text-accents-5">
               Experiment: AI vs Humanity
             </p>
           </div>
-          <div className="text-2xl">🤖🌍</div>
+
+          <StatsDashboard stats={stats} loading={loading} variant="navbar" />
         </div>
       </header>
 
@@ -42,9 +44,6 @@ export default function Home() {
             <span className="font-medium">Error: {error}</span>
           </div>
         )}
-
-        {/* Stats Dashboard */}
-        <StatsDashboard stats={stats} loading={loading} />
 
         {/* Active Viruses */}
         <VirusList viruses={activeViruses} />
