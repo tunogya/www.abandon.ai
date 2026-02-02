@@ -172,7 +172,7 @@ async function main() {
             // Show curl command
             console.log('\n' + colors.bold('Run this command to submit:'));
             console.log(`
-curl -X POST https://www-abandon-ai-party.tunogya.partykit.dev/party/virus \\
+curl -X POST https://api.abandon.ai/api/virus \\
   -H "Content-Type: application/json" \\
   -d '{
     "address": "${result.address}",
@@ -219,7 +219,7 @@ curl -X POST https://www-abandon-ai-party.tunogya.partykit.dev/party/virus \\
             // Show curl command
             console.log('\n' + colors.bold('Run this command to submit:'));
             console.log(`
-curl -X POST https://www-abandon-ai-party.tunogya.partykit.dev/party/vaccine \\
+curl -X POST https://api.abandon.ai/api/vaccine \\
   -H "Content-Type: application/json" \\
   -d '{
     "address": "${result.address}",

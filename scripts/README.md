@@ -112,7 +112,7 @@ Wait for mining to complete. This may take seconds to minutes depending on diffi
 Copy and run the curl command provided by the script:
 
 ```bash
-curl -X POST https://www-abandon-ai-party.tunogya.partykit.dev/party/virus \
+curl -X POST https://api.abandon.ai/api/virus \
   -H "Content-Type: application/json" \
   -d '{...}'
 ```
@@ -196,7 +196,7 @@ SHA256("vaccine:{address}:{target}:{timestamp}:{nonce}")
 
 ## API Endpoints
 
-All requests go to: `https://www-abandon-ai-party.tunogya.partykit.dev/party/`
+All requests go to: `https://api.abandon.ai/api/`
 
 - `POST /virus` - Submit a mined virus
 - `POST /vaccine` - Submit a vaccine
