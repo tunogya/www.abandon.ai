@@ -2,9 +2,11 @@ import type { Virus } from '../types';
 
 interface VirusListProps {
   viruses: Virus[];
+  page?: number;     // default 1
+  pageSize?: number; // default 30
 }
 
-export function VirusList({ viruses }: VirusListProps) {
+export function VirusList({ viruses, page = 1, pageSize = 30 }: VirusListProps) {
   if (viruses.length === 0) {
     return (
       <div className="py-4 text-accents-5">
@@ -17,7 +19,11 @@ export function VirusList({ viruses }: VirusListProps) {
     <div className="">
       <ol className="list-decimal list-inside text-accents-5">
         {viruses.map((virus, index) => (
-          <VirusItem key={virus.id} virus={virus} index={index + 1} />
+          <VirusItem
+            key={virus.id}
+            virus={virus}
+            index={(page - 1) * pageSize + index + 1}
+          />
         ))}
       </ol>
     </div>

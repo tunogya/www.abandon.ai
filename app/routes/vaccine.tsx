@@ -47,7 +47,7 @@ export default function Vaccine() {
                     </div>
                 )}
 
-                <VaccineList vaccines={vaccines} />
+                <VaccineList vaccines={vaccines} page={page} />
 
                 {/* Pagination Controls */}
                 <div className="mt-4 flex justify-center gap-4">

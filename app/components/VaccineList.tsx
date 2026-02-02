@@ -2,9 +2,11 @@ import type { Vaccine } from '../../shared/types';
 
 interface VaccineListProps {
     vaccines: Vaccine[];
+    page?: number;     // default 1
+    pageSize?: number; // default 30
 }
 
-export function VaccineList({ vaccines }: VaccineListProps) {
+export function VaccineList({ vaccines, page = 1, pageSize = 30 }: VaccineListProps) {
     if (vaccines.length === 0) {
         return (
             <div className="py-4 text-accents-5">
@@ -17,7 +19,11 @@ export function VaccineList({ vaccines }: VaccineListProps) {
         <div className="">
             <ol className="list-decimal list-inside text-accents-5">
                 {vaccines.map((vaccine, index) => (
-                    <VaccineItem key={vaccine.id} vaccine={vaccine} index={index + 1} />
+                    <VaccineItem
+                        key={vaccine.id}
+                        vaccine={vaccine}
+                        index={(page - 1) * pageSize + index + 1}
+                    />
                 ))}
             </ol>
         </div>

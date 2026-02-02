@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev:frontend": "react-router dev",
 		"dev:api": "wrangler dev",
-		"build:frontend": "react-router build",
+		"build": "react-router build",
 		"preview": "npm run build:frontend && vite preview",
 		"test": "vitest",
 		"test:ui": "vitest --ui",

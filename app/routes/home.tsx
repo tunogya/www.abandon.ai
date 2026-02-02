@@ -47,7 +47,7 @@ export default function Home() {
           </div>
         )}
 
-        <VirusList viruses={viruses} />
+        <VirusList viruses={viruses} page={page} />
 
         {/* Pagination Controls */}
         <div className="mt-4 flex justify-center gap-4">
