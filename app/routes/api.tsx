@@ -1,5 +1,7 @@
 import type { Route } from "./+types/api";
 import { Link } from "react-router";
+import { useGameStateRest } from "../hooks/useGameStateRest";
+import { StatsDashboard } from "../components/StatsDashboard";
 import { API_ENDPOINTS } from "../config/api";
 
 export function meta({ }: Route.MetaArgs) {
@@ -10,6 +12,8 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Api() {
+    const { stats, loading, error } = useGameStateRest();
+
     return (
         <div className="bg-background min-h-screen font-hn text-[10pt] md:w-[85%] mx-auto my-2">
             {/* Header */}
@@ -19,11 +23,12 @@ export default function Api() {
                 </div>
                 <span className="font-bold text-white mr-2">abandon.ai</span>
                 <div className="flex gap-2 text-white">
-                    <Link to="/" className="hover:underline">new</Link>
+                    <Link to="/" className="hover:underline">virus</Link>
                     <span>|</span>
-                    <span className="text-white font-bold">api</span>
-                    <span>|</span>
-                    <a href="https://github.com/tunogya/www.abandon.ai" target="_blank" rel="noopener noreferrer" className="hover:underline">code</a>
+                    <Link to="/vaccine" className="hover:underline">vaccine</Link>
+                </div>
+                <div className="ml-auto text-white text-xs hidden sm:block">
+                    <StatsDashboard stats={stats} loading={loading} variant="navbar" />
                 </div>
             </header>
 
@@ -107,7 +112,7 @@ export default function Api() {
                     Applications are open for <a href="#" className="hover:underline text-accents-6">Humanity Survival 2026</a>
                 </div>
                 <div className="flex gap-2 justify-center">
-                    <Link to="/" className="hover:underline">Home</Link>
+                    <Link to="/api" className="hover:underline">API</Link>
                     <span>|</span>
                     <a href="https://github.com/tunogya/www.abandon.ai" target="_blank" rel="noopener noreferrer" className="hover:underline">GitHub</a>
                 </div>

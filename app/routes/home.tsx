@@ -23,7 +23,7 @@ export default function Home() {
         </div>
         <span className="font-bold text-white mr-2">abandon.ai</span>
         <div className="flex gap-2 text-white">
-          <Link to="/" className="hover:underline">virus</Link>
+          <span className="font-bold text-white">virus</span>
           <span>|</span>
           <Link to="/vaccine" className="hover:underline">vaccine</Link>
         </div>
@@ -58,8 +58,6 @@ export default function Home() {
           <Link to="/api" className="hover:underline">API</Link>
           <span>|</span>
           <a href="https://github.com/tunogya/www.abandon.ai" target="_blank" rel="noopener noreferrer" className="hover:underline">GitHub</a>
-          <span>|</span>
-          <a href="#" className="hover:underline">Legal</a>
         </div>
         <div className="mt-4 max-w-lg mx-auto border border-accents-2 p-2 bg-accents-1">
           Search: <input type="text" className="border border-accents-4 bg-background text-foreground px-1" />
