@@ -17,7 +17,7 @@ export function VirusList({ viruses, page = 1, pageSize = 30 }: VirusListProps) 
 
   return (
     <div className="">
-      <ol className="list-decimal list-inside text-accents-5">
+      <ol className="list-decimal list-inside text-accents-5" start={(page - 1) * pageSize + 1}>
         {viruses.map((virus, index) => (
           <VirusItem
             key={virus.id}

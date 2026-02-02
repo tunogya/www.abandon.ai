@@ -17,7 +17,7 @@ export function VaccineList({ vaccines, page = 1, pageSize = 30 }: VaccineListPr
 
     return (
         <div className="">
-            <ol className="list-decimal list-inside text-accents-5">
+            <ol className="list-decimal list-inside text-accents-5" start={(page - 1) * pageSize + 1}>
                 {vaccines.map((vaccine, index) => (
                     <VaccineItem
                         key={vaccine.id}
