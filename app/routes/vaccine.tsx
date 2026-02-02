@@ -59,7 +59,7 @@ export default function Vaccine() {
             {/* Footer */}
             <footer className="border-t-2 border-black mt-0 bg-background-content py-4 text-center text-accents-5 text-xs">
                 <div className="mb-2">
-                    Applications are open for <a href="#" className="hover:underline text-accents-6">Humanity Survival 2026</a>
+                    Copyright (c) 2026 ABANDON INC., All rights reserved.
                 </div>
                 <div className="flex gap-2 justify-center">
                     <Link to="/api" className="hover:underline">API</Link>
