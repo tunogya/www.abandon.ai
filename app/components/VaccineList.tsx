@@ -33,7 +33,7 @@ function VaccineItem({ vaccine, index }: { vaccine: Vaccine, index: number }) {
         <li className="mb-1 leading-tight">
             {/* Title Line */}
             <span className="text-foreground font-medium mr-1">
-                Vaccine {vaccine.hash}
+                💉 {vaccine.hash}
             </span>
             <span className={`text-xs ${successColor}`}>
                 ({successLabel})

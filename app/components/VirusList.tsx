@@ -33,7 +33,7 @@ function VirusItem({ virus, index }: { virus: Virus, index: number }) {
     <li className="mb-1 leading-tight">
       {/* Title Line */}
       <span className="text-foreground font-medium mr-1">
-        Virus {virus.hash}
+        🦠 {virus.hash}
       </span>
       <span className="text-accents-5 text-xs">
         ({difficultyLabel})
