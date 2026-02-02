@@ -15,6 +15,33 @@ interface Env {
 
 const app = new Hono<{ Bindings: Env }>();
 
+app.get('/', async (c) => {
+  try {
+    const page = Number(c.req.query('page')) || 1;
+    const limit = Number(c.req.query('limit')) || 30;
+
+    const service = new GameStateService(c.env.abandon_ai_db);
+    const { items, total } = await service.getActiveVirusesPaginated(page, limit);
+
+    return c.json({
+      success: true,
+      viruses: items,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching viruses:', error);
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
+});
+
 app.post('/', async (c) => {
   try {
     const body = await c.req.json<CreateVirusRequest>();

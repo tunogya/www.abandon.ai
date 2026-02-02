@@ -1,9 +1,9 @@
 import type { Route } from "./+types/vaccine";
 import { Link } from "react-router";
 import { useGameStateRest } from "../hooks/useGameStateRest";
-import { useGameHistory } from "../hooks/useGameHistory";
 import { StatsDashboard } from "../components/StatsDashboard";
 import { VaccineList } from "../components/VaccineList";
+import { useVaccines } from "../hooks/useVaccines";
 
 export function meta({ }: Route.MetaArgs) {
     return [
@@ -14,7 +14,7 @@ export function meta({ }: Route.MetaArgs) {
 
 export default function Vaccine() {
     const { stats, loading: statsLoading, error: statsError } = useGameStateRest();
-    const { vaccines, loading: historyLoading, error: historyError } = useGameHistory(100);
+    const { vaccines, loading: vaccinesLoading, error: vaccinesError, page, setPage, pagination } = useVaccines();
 
     return (
         <div className="bg-background min-h-screen font-hn text-[10pt] md:w-[85%] mx-auto my-2">
@@ -41,13 +41,34 @@ export default function Vaccine() {
                         Error loading game stats: {statsError}
                     </div>
                 )}
-                {historyError && (
+                {vaccinesError && (
                     <div className="text-error mb-4">
-                        Error loading vaccine history: {historyError}
+                        Error loading vaccines: {vaccinesError}
                     </div>
                 )}
 
                 <VaccineList vaccines={vaccines} />
+
+                {/* Pagination Controls */}
+                <div className="mt-4 flex justify-center gap-4">
+                    <button
+                        onClick={() => setPage((p: number) => Math.max(1, p - 1))}
+                        disabled={page === 1 || vaccinesLoading}
+                        className="text-accents-5 hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        &lt; prev
+                    </button>
+                    <span className="text-accents-5">
+                        {page}
+                    </span>
+                    <button
+                        onClick={() => setPage((p: number) => p + 1)}
+                        disabled={!pagination || page >= pagination.totalPages || vaccinesLoading}
+                        className="text-accents-5 hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        next &gt;
+                    </button>
+                </div>
 
                 <div className="mt-8 ml-8 text-accents-5 text-xs">
                     <p className="mb-2">

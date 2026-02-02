@@ -176,6 +176,45 @@ describe('API Integration Tests', () => {
     });
   });
 
+  describe('GET /api/virus', () => {
+    it('should return viruses with pagination', async () => {
+      // Create multiple viruses
+      const address = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
+      const difficulty = 3;
+
+      for (let i = 0; i < 5; i++) {
+        const timestamp = Math.floor(Date.now() / 1000) + i;
+        const { nonce } = await findValidNonce(address, timestamp, difficulty);
+        await app.request(
+          '/api/virus',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ address, timestamp, nonce, difficulty, memo: '' }),
+          },
+          env
+        );
+      }
+
+      const response = await app.request('/api/virus?page=1&limit=3', {}, env);
+      expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data.success).toBe(true);
+      expect(data.viruses.length).toBe(3);
+      expect(data.pagination).toBeDefined();
+      expect(data.pagination.page).toBe(1);
+      expect(data.pagination.limit).toBe(3);
+      expect(data.pagination.total).toBe(5);
+      expect(data.pagination.totalPages).toBe(2);
+
+      // Verify second page
+      const response2 = await app.request('/api/virus?page=2&limit=3', {}, env);
+      const data2 = await response2.json();
+      expect(data2.viruses.length).toBe(2);
+      expect(data2.pagination.page).toBe(2);
+    });
+  });
+
   describe('POST /api/vaccine', () => {
     it('should eliminate virus with valid vaccine', async () => {
       // First create a virus
@@ -257,6 +296,63 @@ describe('API Integration Tests', () => {
       const data = await response.json();
       expect(data.success).toBe(false);
       expect(data.error).toContain('not found');
+    });
+  });
+
+  describe('GET /api/vaccine', () => {
+    it('should return vaccines with pagination', async () => {
+      // Create virus and vaccine
+      const address = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb';
+      const timestamp = Math.floor(Date.now() / 1000);
+      const difficulty = 3;
+      const { nonce: virusNonce, hash: virusHash } = await findValidNonce(
+        address,
+        timestamp,
+        difficulty
+      );
+
+      await app.request(
+        '/api/virus',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address, timestamp, nonce: virusNonce, difficulty, memo: '' }),
+        },
+        env
+      );
+
+      // Create vaccine
+      const vaccineTimestamp = Math.floor(Date.now() / 1000);
+      const { nonce: vaccineNonce } = await findValidNonce(
+        address,
+        vaccineTimestamp,
+        difficulty,
+        '',
+        'vaccine',
+        virusHash
+      );
+
+      await app.request(
+        '/api/vaccine',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            address,
+            target: virusHash,
+            timestamp: vaccineTimestamp,
+            nonce: vaccineNonce,
+          }),
+        },
+        env
+      );
+
+      const response = await app.request('/api/vaccine?page=1&limit=10', {}, env);
+      expect(response.status).toBe(200);
+      const data = await response.json();
+      expect(data.success).toBe(true);
+      expect(data.vaccines.length).toBe(1);
+      expect(data.pagination.total).toBe(1);
     });
   });
 

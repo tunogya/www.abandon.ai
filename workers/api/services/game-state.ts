@@ -4,7 +4,7 @@ import type { Virus, Vaccine, GameStats } from '../../../shared/types';
  * Database service layer for game state management
  */
 export class GameStateService {
-  constructor(private db: D1Database) {}
+  constructor(private db: D1Database) { }
 
   /**
    * Create a new virus in the database
@@ -148,6 +148,27 @@ export class GameStateService {
   }
 
   /**
+   * Get active viruses with pagination
+   */
+  async getActiveVirusesPaginated(page: number, limit: number): Promise<{ items: Virus[], total: number }> {
+    const offset = (page - 1) * limit;
+
+    const { results } = await this.db
+      .prepare(`SELECT * FROM viruses WHERE status = 'active' ORDER BY created_at DESC LIMIT ? OFFSET ?`)
+      .bind(limit, offset)
+      .all();
+
+    const countResult = await this.db
+      .prepare(`SELECT COUNT(*) as total FROM viruses WHERE status = 'active'`)
+      .first();
+
+    return {
+      items: results.map(mapRowToVirus),
+      total: (countResult?.total as number) || 0
+    };
+  }
+
+  /**
    * Get vaccine history with limit
    */
   async getVaccineHistory(limit: number = 100): Promise<Vaccine[]> {
@@ -157,6 +178,27 @@ export class GameStateService {
       .all();
 
     return results.map(mapRowToVaccine);
+  }
+
+  /**
+   * Get vaccines with pagination
+   */
+  async getVaccinesPaginated(page: number, limit: number): Promise<{ items: Vaccine[], total: number }> {
+    const offset = (page - 1) * limit;
+
+    const { results } = await this.db
+      .prepare(`SELECT * FROM vaccines ORDER BY created_at DESC LIMIT ? OFFSET ?`)
+      .bind(limit, offset)
+      .all();
+
+    const countResult = await this.db
+      .prepare(`SELECT COUNT(*) as total FROM vaccines`)
+      .first();
+
+    return {
+      items: results.map(mapRowToVaccine),
+      total: (countResult?.total as number) || 0
+    };
   }
 }
 
