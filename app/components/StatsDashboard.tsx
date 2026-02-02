@@ -14,6 +14,7 @@ export function StatsDashboard({ stats, loading, variant = 'default' }: StatsDas
 
   return (
     <div className={`text-[10pt] ${textColor} flex items-center gap-2`}>
+      {loading && <span className="text-accents-5 mr-1">(syncing...)</span>}
       <span>active: {stats.activeViruses}</span>
       <span>|</span>
       <span>total: {stats.totalVirusesCreated}</span>
@@ -21,7 +22,6 @@ export function StatsDashboard({ stats, loading, variant = 'default' }: StatsDas
       <span>cured: {stats.eliminatedViruses}</span>
       <span>|</span>
       <span>agents: {stats.uniqueAddresses}</span>
-      {loading && <span className="text-accents-5 ml-1">(syncing...)</span>}
     </div>
   );
 }
