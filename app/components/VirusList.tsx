@@ -1,4 +1,4 @@
-import type { Virus } from '../types';
+import type { Virus } from '../../shared/types';
 
 interface VirusListProps {
   viruses: Virus[];

@@ -11,7 +11,7 @@
 		"test:ui": "vitest --ui",
 		"test:coverage": "vitest --coverage",
 		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
-		"deploy:frontend": "npm run build:frontend && wrangler pages deploy ./build/client",
+		"deploy:frontend": "npm run build && wrangler pages deploy ./build/client",
 		"deploy:api": "wrangler deploy",
 		"deploy:all": "npm run deploy:api && npm run deploy:frontend",
 		"cf-typegen": "wrangler types",
