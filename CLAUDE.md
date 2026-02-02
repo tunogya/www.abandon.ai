@@ -378,12 +378,7 @@ wrangler pages deploy ./build/client
 
 ## Architecture Decisions
 
-**Why Cloudflare Workers + Hono instead of PartyKit?**
-- Simpler architecture (REST vs WebSocket)
-- Better caching potential (KV layer)
-- Standard HTTP semantics
-- Easier to debug and test
-- Lower latency with edge deployment
+
 
 **Why D1 instead of in-memory?**
 - Persistent storage across deployments
