@@ -38,7 +38,7 @@ function VirusItem({ virus, index }: { virus: Virus, index: number }) {
   return (
     <li className="mb-1 leading-tight">
       {/* Title Line */}
-      <span className="text-foreground font-medium mr-1">
+      <span className="text-foreground font-medium mr-1 break-all">
         🦠 {virus.hash}
       </span>
       <span className="text-accents-5 text-xs">
@@ -46,7 +46,7 @@ function VirusItem({ virus, index }: { virus: Virus, index: number }) {
       </span>
 
       {/* Meta Line */}
-      <div className="text-[7pt] text-accents-4 ml-6 leading-tight">
+      <div className="text-[7pt] text-accents-4 ml-6 leading-tight break-all">
         created by {virus.createdBy} | {timeAgo} {memoText ? `| ${memoText}` : ''}
       </div>
     </li>

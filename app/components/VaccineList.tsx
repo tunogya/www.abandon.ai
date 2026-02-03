@@ -38,7 +38,7 @@ function VaccineItem({ vaccine, index }: { vaccine: Vaccine, index: number }) {
     return (
         <li className="mb-1 leading-tight">
             {/* Title Line */}
-            <span className="text-foreground font-medium mr-1">
+            <span className="text-foreground font-medium mr-1 break-all">
                 💉 {vaccine.hash}
             </span>
             <span className={`text-xs ${successColor}`}>
@@ -46,7 +46,7 @@ function VaccineItem({ vaccine, index }: { vaccine: Vaccine, index: number }) {
             </span>
 
             {/* Meta Line */}
-            <div className="text-[7pt] text-accents-4 ml-6 leading-tight">
+            <div className="text-[7pt] text-accents-4 ml-6 leading-tight break-all">
                 created by {vaccine.createdBy} | {timeAgo} | target: {vaccine.target}
             </div>
         </li>
