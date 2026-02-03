@@ -15,6 +15,27 @@ interface Env {
 
 const app = new Hono<{ Bindings: Env }>();
 
+app.get('/search', async (c) => {
+  try {
+    const query = (c.req.query('q') || '').trim();
+
+    if (!query) {
+      return c.json({ success: false, error: 'Missing query parameter: q' }, 400);
+    }
+
+    const service = new GameStateService(c.env.abandon_ai_db);
+    const viruses = await service.searchVirusesByHashOrAddress(query);
+
+    return c.json({ success: true, viruses });
+  } catch (error) {
+    console.error('Error searching viruses:', error);
+    return c.json({
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
+});
+
 app.get('/', async (c) => {
   try {
     const page = Number(c.req.query('page')) || 1;

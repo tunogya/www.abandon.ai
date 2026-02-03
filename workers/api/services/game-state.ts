@@ -169,6 +169,25 @@ export class GameStateService {
   }
 
   /**
+   * Search viruses by exact hash or creator address
+   */
+  async searchVirusesByHashOrAddress(query: string): Promise<Virus[]> {
+    const normalized = query.trim();
+    if (!normalized) return [];
+
+    const { results } = await this.db
+      .prepare(
+        `SELECT * FROM viruses
+         WHERE hash = ? OR created_by = ?
+         ORDER BY created_at DESC`
+      )
+      .bind(normalized, normalized)
+      .all();
+
+    return results.map(mapRowToVirus);
+  }
+
+  /**
    * Get vaccine history with limit
    */
   async getVaccineHistory(limit: number = 100): Promise<Vaccine[]> {

@@ -1,9 +1,13 @@
 import type { Route } from "./+types/home";
 import { Link } from "react-router";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { useGameStateRest } from "../hooks/useGameStateRest";
 import { StatsDashboard } from "../components/StatsDashboard";
 import { VirusList } from "../components/VirusList";
 import { useViruses } from "../hooks/useViruses";
+import { API_ENDPOINTS } from "../config/api";
+import type { Virus } from "../../shared/types";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -15,6 +19,55 @@ export function meta({ }: Route.MetaArgs) {
 export default function Home() {
   const { stats, loading: statsLoading, error: statsError } = useGameStateRest();
   const { viruses, loading: virusesLoading, error: virusesError, page, setPage, pagination } = useViruses();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Virus[] | null>(null);
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+
+  const isSearchActive = searchResults !== null;
+  const displayedViruses = searchResults ?? viruses;
+  const displayPage = isSearchActive ? 1 : (pagination?.page ?? page);
+
+  const handleSearchSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const trimmed = searchQuery.trim();
+
+    if (!trimmed) {
+      setSearchResults(null);
+      setSearchError(null);
+      return;
+    }
+
+    try {
+      setSearching(true);
+      setSearchError(null);
+      const response = await fetch(`${API_ENDPOINTS.VIRUS_SEARCH}?q=${encodeURIComponent(trimmed)}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSearchResults(result.viruses);
+      } else {
+        throw new Error(result.error || "Search failed");
+      }
+    } catch (error) {
+      console.error("Search failed:", error);
+      setSearchError(error instanceof Error ? error.message : "Unknown error");
+      setSearchResults([]);
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  const handleSearchClear = () => {
+    setSearchQuery("");
+    setSearchResults(null);
+    setSearchError(null);
+  };
 
   return (
     <div className="bg-background min-h-screen font-hn text-[10pt] md:w-[85%] mx-auto my-2">
@@ -47,10 +100,29 @@ export default function Home() {
           </div>
         )}
 
-        <VirusList viruses={viruses} page={pagination?.page ?? page} />
+        {searchError && (
+          <div className="text-error mb-4">
+            Error searching: {searchError}
+          </div>
+        )}
+
+        {isSearchActive && (
+          <div className="mb-2 text-accents-5 text-xs">
+            Showing results for "{searchQuery.trim()}" ({displayedViruses.length})
+          </div>
+        )}
+
+        {isSearchActive && displayedViruses.length === 0 ? (
+          <div className="py-4 text-accents-5">
+            No results found.
+          </div>
+        ) : (
+          <VirusList viruses={displayedViruses} page={displayPage} />
+        )}
 
         {/* Pagination Controls */}
-        <div className="mt-4 flex justify-center gap-4">
+        {!isSearchActive && (
+          <div className="mt-4 flex justify-center gap-4">
           <button
             onClick={() => setPage((p: number) => Math.max(1, p - 1))}
             disabled={page === 1 || virusesLoading}
@@ -68,7 +140,8 @@ export default function Home() {
           >
             next &gt;
           </button>
-        </div>
+          </div>
+        )}
 
         <div className="mt-8 ml-8 text-accents-5 text-xs">
           <p className="mb-2">
@@ -88,7 +161,35 @@ export default function Home() {
           <a href="https://github.com/tunogya/www.abandon.ai" target="_blank" rel="noopener noreferrer" className="hover:underline">GitHub</a>
         </div>
         <div className="mt-4 max-w-lg mx-auto border border-accents-2 p-2 bg-accents-1">
-          Search: <input type="text" className="border border-accents-4 bg-background text-foreground px-1" />
+          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+            <label htmlFor="virus-search" className="text-accents-5 text-xs">
+              Search:
+            </label>
+            <input
+              id="virus-search"
+              type="text"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="wallet address or virus hash"
+              className="flex-1 border border-accents-4 bg-background text-foreground px-1"
+            />
+            <button
+              type="submit"
+              disabled={searching}
+              className="text-accents-5 hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {searching ? "..." : "go"}
+            </button>
+            {isSearchActive && (
+              <button
+                type="button"
+                onClick={handleSearchClear}
+                className="text-accents-5 hover:text-foreground"
+              >
+                clear
+              </button>
+            )}
+          </form>
         </div>
       </footer>
     </div>
